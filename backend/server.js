@@ -2,7 +2,10 @@
 const mongoose = require('mongoose');
 const express = require('express');
 
+//Routers Here
 const authRoutes = require('./routes/authRoutes');
+
+
 
 const app = express();
 app.use(express.json());
