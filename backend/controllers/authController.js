@@ -2,7 +2,7 @@ const User = require('../models/Users');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const JWT_SECRET = "group2"
+const JWT_SECRET = "123"
 
 exports.register = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: '1h',
     });
-    res.status(201).json({ message: 'User registered successfully\nToken:' + token });
+    res.status(201).json({ message: 'User registered successfully -- Token:' + token });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Something went wrong' });

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = "group2"
+const JWT_SECRET = "123"
 
 function authenticate(req, res, next) {
   const token = req.header('Authorization')?.replace('Bearer ', '');
