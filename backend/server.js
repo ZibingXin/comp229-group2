@@ -6,6 +6,7 @@ const express = require('express');
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/BookRoutes');
 const borrowRoutes = require('./routes/BorrowRoutes');
+const reservationTableRoutes = require('./routes/ReservationTableRoutes');
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes); 
 app.use('/api/borrows', borrowRoutes); 
+app.use('/api/reservations', reservationTableRoutes);
 
 app.listen(3000, () => {
     console.log(`Server listening on port 3000`);
