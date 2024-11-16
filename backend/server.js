@@ -1,6 +1,6 @@
-// file name: server.js
 const mongoose = require('mongoose');
 const express = require('express');
+const cors = require('cors'); 
 
 //Routers Here
 const authRoutes = require('./routes/authRoutes');
@@ -11,6 +11,11 @@ const reservationTableRoutes = require('./routes/ReservationTableRoutes');
 const app = express();
 app.use(express.json());
 
+app.use(cors({
+    origin: 'http://localhost:3001', 
+    methods: 'GET, POST, PUT, DELETE, OPTIONS', 
+    allowedHeaders: 'Content-Type, Authorization', 
+}));
 
 const MongoDB_URI = 'mongodb+srv://group2:group2@cluster0.obuw4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(MongoDB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
