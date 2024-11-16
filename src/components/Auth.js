@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
-import { authService } from '../services/apiService'; 
+import { authService } from '../services/apiService';
+import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('user'); 
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isLogin) {
-        // Login logic
         const response = await authService.login({ email, password });
-        setMessage(`Login successful! Token: ${response.data.token}`);
+        setMessage('Login successful!');
+
+        // Redirect based on the selected role
+        if (role === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/user-dashboard');
+        }
       } else {
-        // Registration logic
-        const response = await authService.register({ username, email, password });
-        setMessage(`Registration successful! Message: ${response.data.message}`);
+        const response = await authService.register({ email, password, role });
+        setMessage('Registration successful!');
       }
     } catch (error) {
       setMessage(error.response?.data?.error || 'Operation failed');
@@ -29,17 +36,6 @@ const Auth = () => {
     <div className="auth-container">
       <h1>{isLogin ? 'Login' : 'Register'}</h1>
       <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <div>
-            <label>Username:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-        )}
         <div>
           <label>Email:</label>
           <input
@@ -57,6 +53,13 @@ const Auth = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+        </div>
+        <div>
+          <label>Role:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
       </form>
