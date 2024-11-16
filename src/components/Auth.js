@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState(''); 
   const [role, setRole] = useState('user'); 
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState('');
@@ -24,7 +25,7 @@ const Auth = () => {
           navigate('/user-dashboard');
         }
       } else {
-        const response = await authService.register({ email, password, role });
+        const response = await authService.register({ email, password, role, username });
         setMessage('Registration successful!');
       }
     } catch (error) {
@@ -36,6 +37,17 @@ const Auth = () => {
     <div className="auth-container">
       <h1>{isLogin ? 'Login' : 'Register'}</h1>
       <form onSubmit={handleSubmit}>
+        {!isLogin && ( 
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+        )}
         <div>
           <label>Email:</label>
           <input
