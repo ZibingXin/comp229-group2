@@ -139,8 +139,12 @@ const AdminDashboard = () => {
         user_id: userId,
         book_id: borrowId,
       };
-
-      await borrowService.returnBook(returnData);
+  
+      console.log('Sending return request:', returnData);
+  
+      const response = await borrowService.returnBook(returnData);
+      console.log('Return response:', response.data);
+  
       setMessage('Book returned successfully!');
       handleSearchBorrowedBooks();
     } catch (error) {
@@ -148,6 +152,7 @@ const AdminDashboard = () => {
       setMessage('Failed to return book.');
     }
   };
+  
 
   return (
     <div>
