@@ -35,7 +35,7 @@ const ReservedBooks = () => {
       <ul>
         {reservedBooks.map((book) => (
           <li key={book._id}>
-            {book.title} by {book.author}
+            {book.bookTitle} 
             <button onClick={() => handleCancel(book._id)}>Cancel Reservation</button>
           </li>
         ))}

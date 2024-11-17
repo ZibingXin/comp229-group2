@@ -1,10 +1,16 @@
 const BorrowRecord = require('../models/BorrowRecord');
+const mongoose = require('mongoose');
 
 // 1. Borrow a Book (POST /api/borrows)
 exports.borrowBook = async (req, res) => {
     try {
         const { user_id, book_id, borrow_time, return_time, status } = req.body;
-        
+
+        // Validate ObjectId
+        if (!mongoose.Types.ObjectId.isValid(user_id) || !mongoose.Types.ObjectId.isValid(book_id)) {
+            return res.status(400).json({ error: 'Invalid user_id or book_id' });
+        }
+
         // Check if there is an existing borrow record that has not been returned
         const existingBorrow = await BorrowRecord.findOne({ user_id, book_id, status: 'Borrowed' });
         if (existingBorrow) {
@@ -41,7 +47,13 @@ exports.getBorrowedBooks = async (req, res) => {
 // 3. Get Borrow Records by User ID (GET /api/borrows/user/:user_id)
 exports.getBorrowRecordsByUserId = async (req, res) => {
     try {
-        const borrowRecords = await BorrowRecord.find({ user_id: req.params.user_id });
+        const { user_id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(user_id)) {
+            return res.status(400).json({ error: 'Invalid user_id' });
+        }
+
+        const borrowRecords = await BorrowRecord.find({ user_id });
         if (borrowRecords.length === 0) {
             return res.status(404).json({ error: 'No borrow records found for this user' });
         }
@@ -55,7 +67,13 @@ exports.getBorrowRecordsByUserId = async (req, res) => {
 // 4. Get Borrow Record by ID (GET /api/borrows/:id)
 exports.getBorrowRecordById = async (req, res) => {
     try {
-        const borrowRecord = await BorrowRecord.findById(req.params.id);
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid borrow record ID' });
+        }
+
+        const borrowRecord = await BorrowRecord.findById(id);
         if (!borrowRecord) {
             return res.status(404).json({ error: 'Borrow record not found' });
         }
@@ -71,14 +89,17 @@ exports.returnBook = async (req, res) => {
     try {
         const { user_id, book_id, actual_return_time } = req.body;
 
-        // Find the borrow record
+        if (!mongoose.Types.ObjectId.isValid(user_id) || !mongoose.Types.ObjectId.isValid(book_id)) {
+            return res.status(400).json({ error: 'Invalid user_id or book_id' });
+        }
+
         const borrowRecord = await BorrowRecord.findOneAndUpdate(
-            { user_id, book_id, status: 'Borrowed' }, // Search criteria
+            { user_id, book_id, status: 'Borrowed' },
             { 
                 actual_return_time: actual_return_time || new Date(), 
-                status: 'Returned' // Update the status to 'Returned'
-            }, // Update fields
-            { new: true } // Return the updated record
+                status: 'Returned'
+            },
+            { new: true }
         );
 
         if (!borrowRecord) {

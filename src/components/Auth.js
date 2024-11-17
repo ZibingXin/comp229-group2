@@ -18,6 +18,9 @@ const Auth = () => {
         const response = await authService.login({ email, password });
         setMessage('Login successful!');
 
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+
         // Redirect based on the selected role
         if (role === 'admin') {
           navigate('/admin-dashboard');
