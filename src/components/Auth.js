@@ -15,7 +15,7 @@ const Auth = () => {
     e.preventDefault();
     try {
       if (isLogin) {
-        const response = await authService.login({ email, password });
+        const response = await authService.login({ email, password, role });
         setMessage('Login successful!');
 
         const token = response.data.token;

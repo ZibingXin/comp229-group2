@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ error: 'Dose not find user with this email' });
@@ -34,6 +34,10 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Wrong password' });
+    }
+    const roleMatch = user.role === role;
+    if (!roleMatch) {
+      return res.status(400).json({ error: 'Wrong role' });
     }
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: '1h',
