@@ -112,3 +112,18 @@ exports.returnBook = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
+
+// 6. Delete All Borrow Records (DELETE /api/borrows)
+exports.deleteAllBorrowRecords = async (req, res) => {
+    try {
+        const result = await BorrowRecord.deleteMany({});
+        res.status(200).json({
+            message: 'All borrow records have been deleted successfully',
+            deletedCount: result.deletedCount 
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+};
+

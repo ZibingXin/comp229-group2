@@ -4,7 +4,8 @@ const {
   returnBook,
   getBorrowedBooks,
   getBorrowRecordsByUserId,
-  getBorrowRecordById
+  getBorrowRecordById,
+  deleteAllBorrowRecords 
 } = require('../controllers/borrowController.js');
 
 const router = express.Router();
@@ -23,5 +24,8 @@ router.get('/:id', getBorrowRecordById);
 
 // PUT: Return a borrowed book
 router.put('/return', returnBook);
+
+// DELETE: Delete all borrow records
+router.delete('/', deleteAllBorrowRecords); 
 
 module.exports = router;

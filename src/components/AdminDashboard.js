@@ -17,6 +17,8 @@ const AdminDashboard = () => {
     quantity: '',
   });
   const [message, setMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
 
   // Fetch books on mount
   useEffect(() => {
@@ -133,11 +135,11 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleReturnBook = async (borrowId) => {
+  const handleReturnBook = async (borrowId, bookId) => {
     try {
       const returnData = {
         user_id: userId,
-        book_id: borrowId,
+        book_id: bookId,
       };
   
       console.log('Sending return request:', returnData);
@@ -145,13 +147,24 @@ const AdminDashboard = () => {
       const response = await borrowService.returnBook(returnData);
       console.log('Return response:', response.data);
   
-      setMessage('Book returned successfully!');
+      setSuccessMessage('Book returned successfully!');
+      setMessage('');
       handleSearchBorrowedBooks();
     } catch (error) {
       console.error('Error returning book:', error);
       setMessage('Failed to return book.');
     }
   };
+   
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000); 
+  
+      return () => clearTimeout(timer); 
+    }
+  }, [successMessage]);
   
 
   return (
@@ -254,14 +267,17 @@ const AdminDashboard = () => {
         <ul>
           {borrowedBooks.map((record) => (
             <li key={record._id}>
-              {record.book_id.title} - Borrowed on {record.borrow_time}
-              <button onClick={() => handleReturnBook(record._id)}>Return</button>
+              {record.book_id?.title || 'Title not available'} - Borrowed on {record.borrow_time}
+              <button onClick={() => handleReturnBook(record._id, record.book_id._id)}>Return</button>
             </li>
           ))}
         </ul>
+
       </div>
 
       <p>{message}</p>
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+
     </div>
   );
 };
