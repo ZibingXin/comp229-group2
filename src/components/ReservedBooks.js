@@ -21,6 +21,13 @@ const ReservedBooks = () => {
   const handleCancel = async (reservationId) => {
     try {
       const response = await reservationService.cancelReservation(reservationId);
+
+      // Update books quantity when a reservation is canceled
+      const canceledBook = reservedBooks.find((book) => book._id === reservationId);
+      if (canceledBook) {
+        canceledBook.book.quantity += 1; // Increase quantity on cancel
+      }
+
       setMessage('Reservation cancelled successfully!');
       setReservedBooks(reservedBooks.filter((book) => book._id !== reservationId));
     } catch (error) {
@@ -35,7 +42,9 @@ const ReservedBooks = () => {
       <ul>
         {reservedBooks.map((book) => (
           <li key={book._id}>
-            {book.bookTitle} 
+            {book.bookTitle} (Status: {book.status})
+            {book.reservationDate && ` Reserved on: ${new Date(book.reservationDate).toLocaleDateString()}`}
+            {book.book && ` - Quantity: ${book.book.quantity}`}
             <button onClick={() => handleCancel(book._id)}>Cancel Reservation</button>
           </li>
         ))}

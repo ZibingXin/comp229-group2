@@ -19,8 +19,6 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-
-  // Fetch books on mount
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -35,7 +33,16 @@ const AdminDashboard = () => {
     fetchBooks();
   }, []);
 
-  // Handle adding or editing a book
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000); // Message will disappear after 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   const handleAddOrEditBook = async () => {
     try {
       if (!form.title || !form.author || !form.isbn) {
@@ -98,7 +105,9 @@ const AdminDashboard = () => {
   const handleSearchReservations = async () => {
     try {
       const response = await reservationService.getAllReservations();
-      const filteredReservations = response.data.filter((r) => r.userId === userId);
+      const filteredReservations = response.data.filter(
+        (r) => r.userId === userId && r.status !== 'Canceled'
+      );
       setReservations(filteredReservations);
       setMessage('');
     } catch (error) {
@@ -110,7 +119,6 @@ const AdminDashboard = () => {
   const handleSearchBorrowedBooks = async () => {
     try {
       const response = await borrowService.getUserBorrowRecords(userId);
-      console.log(response.data); 
       setBorrowedBooks(response.data);
       setMessage('');
     } catch (error) {
@@ -141,12 +149,30 @@ const AdminDashboard = () => {
         user_id: userId,
         book_id: bookId,
       };
-  
+
       console.log('Sending return request:', returnData);
-  
+
       const response = await borrowService.returnBook(returnData);
       console.log('Return response:', response.data);
-  
+
+      // Increase book quantity by 1
+      const bookToUpdate = books.find((book) => book._id === bookId);
+      if (bookToUpdate) {
+        await bookService.updateBook(bookId, {
+          ...bookToUpdate,
+          quantity: bookToUpdate.quantity + 1,
+        });
+
+        // Update books list
+        setBooks(
+          books.map((book) =>
+            book._id === bookId
+              ? { ...book, quantity: book.quantity + 1 }
+              : book
+          )
+        );
+      }
+
       setSuccessMessage('Book returned successfully!');
       setMessage('');
       handleSearchBorrowedBooks();
@@ -155,21 +181,13 @@ const AdminDashboard = () => {
       setMessage('Failed to return book.');
     }
   };
-   
-  useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000); 
-  
-      return () => clearTimeout(timer); 
-    }
-  }, [successMessage]);
-  
 
   return (
     <div>
       <h1>Admin Dashboard</h1>
+
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {message && <p style={{ color: 'red' }}>{message}</p>}
 
       <div>
         <h2>{selectedBook ? 'Edit Book' : 'Add Book'}</h2>
@@ -228,7 +246,7 @@ const AdminDashboard = () => {
         <ul>
           {books.map((book) => (
             <li key={book._id}>
-              {book.title} by {book.author} (ISBN: {book.isbn})
+              {book.title} by {book.author} (ISBN: {book.isbn}) - Quantity: {book.quantity}
               <button onClick={() => handleSelectBook(book)}>Edit</button>
               <button onClick={() => handleDeleteBook(book._id)}>Delete</button>
             </li>
@@ -267,17 +285,12 @@ const AdminDashboard = () => {
         <ul>
           {borrowedBooks.map((record) => (
             <li key={record._id}>
-              {record.book_id?.title || 'Title not available'} - Borrowed on {record.borrow_time}
+              {record.book_id?.title || 'Title not available'} - Borrowed on {record.borrow_time} - Status: {record.status}
               <button onClick={() => handleReturnBook(record._id, record.book_id._id)}>Return</button>
             </li>
           ))}
         </ul>
-
       </div>
-
-      <p>{message}</p>
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-
     </div>
   );
 };
