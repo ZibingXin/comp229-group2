@@ -36,7 +36,7 @@ exports.borrowBook = async (req, res) => {
 // 2. Get all Borrow Records (GET /api/borrows)
 exports.getBorrowedBooks = async (req, res) => {
     try {
-        const borrowRecords = await BorrowRecord.find();
+        const borrowRecords = await BorrowRecord.find().populate('book_id', 'title');
         res.status(200).json(borrowRecords);
     } catch (error) {
         console.log(error);
@@ -53,7 +53,7 @@ exports.getBorrowRecordsByUserId = async (req, res) => {
             return res.status(400).json({ error: 'Invalid user_id' });
         }
 
-        const borrowRecords = await BorrowRecord.find({ user_id });
+        const borrowRecords = await BorrowRecord.find({ user_id }).populate('book_id', 'title');
         if (borrowRecords.length === 0) {
             return res.status(404).json({ error: 'No borrow records found for this user' });
         }
@@ -73,7 +73,7 @@ exports.getBorrowRecordById = async (req, res) => {
             return res.status(400).json({ error: 'Invalid borrow record ID' });
         }
 
-        const borrowRecord = await BorrowRecord.findById(id);
+        const borrowRecord = await BorrowRecord.findById(id).populate('book_id', 'title');
         if (!borrowRecord) {
             return res.status(404).json({ error: 'Borrow record not found' });
         }
@@ -100,7 +100,7 @@ exports.returnBook = async (req, res) => {
                 status: 'Returned'
             },
             { new: true }
-        );
+        ).populate('book_id', 'title');
 
         if (!borrowRecord) {
             return res.status(404).json({ error: 'No active borrow record found for this user and book' });

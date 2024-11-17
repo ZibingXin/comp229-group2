@@ -3,109 +3,148 @@ import { bookService, borrowService, reservationService } from '../services/apiS
 
 const AdminDashboard = () => {
   const [books, setBooks] = useState([]);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [reservations, setReservations] = useState([]);
   const [borrowedBooks, setBorrowedBooks] = useState([]);
-  const [reservationRequests, setReservationRequests] = useState([]);
   const [userId, setUserId] = useState('');
+  const [form, setForm] = useState({
+    title: '',
+    author: '',
+    isbn: '',
+    publisher: '',
+    year_published: '',
+    category: '',
+    quantity: '',
+  });
   const [message, setMessage] = useState('');
 
+  // Fetch books on mount
   useEffect(() => {
-    // Fetch all books on load
     const fetchBooks = async () => {
       try {
         const response = await bookService.getBooks();
         setBooks(response.data);
       } catch (error) {
         console.error('Error fetching books:', error);
-        setMessage('Failed to fetch books.');
+        setMessage('Error fetching books.');
       }
     };
 
     fetchBooks();
   }, []);
 
-  // Search Reservations
-  const handleSearchReservations = async () => {
+  // Handle adding or editing a book
+  const handleAddOrEditBook = async () => {
     try {
-      if (!userId) {
-        setMessage('User ID is required.');
+      if (!form.title || !form.author || !form.isbn) {
+        setMessage('Title, Author, and ISBN are required.');
         return;
       }
 
+      if (selectedBook) {
+        const updatedBook = await bookService.updateBook(selectedBook._id, form);
+        setBooks(
+          books.map((book) => (book._id === selectedBook._id ? updatedBook.data : book))
+        );
+        setMessage('Book updated successfully!');
+      } else {
+        const newBook = await bookService.addBook(form);
+        setBooks([...books, newBook.data]);
+        setMessage('Book added successfully!');
+      }
+
+      setForm({
+        title: '',
+        author: '',
+        isbn: '',
+        publisher: '',
+        year_published: '',
+        category: '',
+        quantity: '',
+      });
+      setSelectedBook(null);
+    } catch (error) {
+      console.error('Error saving book:', error);
+      setMessage('Failed to save book.');
+    }
+  };
+
+  const handleSelectBook = (book) => {
+    setSelectedBook(book);
+    setForm({
+      title: book.title,
+      author: book.author,
+      isbn: book.isbn,
+      publisher: book.publisher,
+      year_published: book.year_published,
+      category: book.category,
+      quantity: book.quantity,
+    });
+  };
+
+  const handleDeleteBook = async (bookId) => {
+    try {
+      await bookService.deleteBook(bookId);
+      setBooks(books.filter((book) => book._id !== bookId));
+      setMessage('Book deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      setMessage('Failed to delete book.');
+    }
+  };
+
+  const handleSearchReservations = async () => {
+    try {
       const response = await reservationService.getAllReservations();
       const filteredReservations = response.data.filter((r) => r.userId === userId);
-      setReservationRequests(filteredReservations);
+      setReservations(filteredReservations);
       setMessage('');
     } catch (error) {
-      console.error('Error fetching reservations:', error.response?.data || error.message);
+      console.error('Error searching reservations:', error);
       setMessage('Failed to fetch reservations.');
     }
   };
 
-  // Borrow a Book
-  const handleBorrowBook = async (reservationId, bookId) => {
-    try {
-      if (!userId || !bookId) {
-        setMessage('User ID and Book ID are required.');
-        return;
-      }
-
-      const borrowData = {
-        user_id: userId,
-        book_id: bookId,
-        borrow_time: new Date().toISOString(), // Ensure valid date format
-        status: 'Borrowed',
-      };
-
-      console.log('Borrow Request:', borrowData); // Debug log
-      await borrowService.borrowBook(borrowData);
-      setMessage('Book borrowed successfully!');
-      handleSearchReservations(); // Refresh reservations
-    } catch (error) {
-      console.error('Error borrowing book:', error.response?.data || error.message);
-      setMessage('Failed to borrow book.');
-    }
-  };
-
-  // Search Borrowed Books
   const handleSearchBorrowedBooks = async () => {
     try {
-      if (!userId) {
-        setMessage('User ID is required.');
-        return;
-      }
-
-      console.log('Fetching borrowed books for user ID:', userId); // Debug log
-      const response = await borrowService.getBorrowRecordsByUserId(userId);
-      console.log('Borrowed books data:', response.data); // Debug log
-
+      const response = await borrowService.getUserBorrowRecords(userId);
+      console.log(response.data); 
       setBorrowedBooks(response.data);
       setMessage('');
     } catch (error) {
-      console.error('Error fetching borrowed books:', error.response?.data || error.message);
+      console.error('Error searching borrowed books:', error);
       setMessage('Failed to fetch borrowed books.');
     }
   };
 
-  // Return a Book
-  const handleReturnBook = async (bookId) => {
+  const handleBorrowBook = async (reservationId, bookId) => {
     try {
-      if (!userId || !bookId) {
-        setMessage('User ID and Book ID are required.');
-        return;
-      }
-
-      const returnData = {
+      const borrowData = {
         user_id: userId,
         book_id: bookId,
-        actual_return_time: new Date().toISOString(), // Ensure valid date format
       };
 
-      console.log('Return Request:', returnData); // Debug log
+      await borrowService.borrowBook(borrowData);
+      setMessage('Book borrowed successfully!');
+      handleSearchReservations();
+    } catch (error) {
+      console.error('Error borrowing book:', error);
+      setMessage('Failed to borrow book.');
+    }
+  };
+
+  const handleReturnBook = async (borrowId) => {
+    try {
+      const returnData = {
+        user_id: userId,
+        book_id: borrowId,
+      };
+
       await borrowService.returnBook(returnData);
       setMessage('Book returned successfully!');
-      handleSearchBorrowedBooks(); // Refresh borrowed books
+      handleSearchBorrowedBooks();
     } catch (error) {
-      console.error('Error returning book:', error.response?.data || error.message);
+      console.error('Error returning book:', error);
       setMessage('Failed to return book.');
     }
   };
@@ -114,21 +153,73 @@ const AdminDashboard = () => {
     <div>
       <h1>Admin Dashboard</h1>
 
-      {/* Book List */}
+      <div>
+        <h2>{selectedBook ? 'Edit Book' : 'Add Book'}</h2>
+        <input
+          type="text"
+          placeholder="Title"
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Author"
+          value={form.author}
+          onChange={(e) => setForm({ ...form, author: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="ISBN"
+          value={form.isbn}
+          onChange={(e) => setForm({ ...form, isbn: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Publisher"
+          value={form.publisher}
+          onChange={(e) => setForm({ ...form, publisher: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Year Published"
+          value={form.year_published}
+          onChange={(e) => setForm({ ...form, year_published: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Quantity"
+          value={form.quantity}
+          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+        />
+        <button onClick={handleAddOrEditBook}>
+          {selectedBook ? 'Update Book' : 'Add Book'}
+        </button>
+        {selectedBook && (
+          <button onClick={() => setSelectedBook(null)}>Cancel Edit</button>
+        )}
+      </div>
+
       <div>
         <h2>Book List</h2>
         <ul>
           {books.map((book) => (
             <li key={book._id}>
               {book.title} by {book.author} (ISBN: {book.isbn})
+              <button onClick={() => handleSelectBook(book)}>Edit</button>
+              <button onClick={() => handleDeleteBook(book._id)}>Delete</button>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Manage Borrowing */}
       <div>
-        <h2>Manage Borrowing</h2>
+        <h2>Manage Reservations</h2>
         <input
           type="text"
           placeholder="Enter User ID"
@@ -137,20 +228,17 @@ const AdminDashboard = () => {
         />
         <button onClick={handleSearchReservations}>Search Reservations</button>
         <ul>
-          {reservationRequests.map((request) => (
-            <li key={request._id}>
-              {request.bookTitle} (Reserved by: {request.userName})
-              <button onClick={() => handleBorrowBook(request._id, request.bookId)}>
-                Borrow
-              </button>
+          {reservations.map((reservation) => (
+            <li key={reservation._id}>
+              {reservation.bookTitle} - Reserved on {reservation.reservationDate}
+              <button onClick={() => handleBorrowBook(reservation._id, reservation.bookId)}>Borrow</button>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Manage Returns */}
       <div>
-        <h2>Manage Returns</h2>
+        <h2>Manage Borrowed Books</h2>
         <input
           type="text"
           placeholder="Enter User ID"
@@ -159,10 +247,10 @@ const AdminDashboard = () => {
         />
         <button onClick={handleSearchBorrowedBooks}>Search Borrowed Books</button>
         <ul>
-          {borrowedBooks.map((borrowed) => (
-            <li key={borrowed._id}>
-              {borrowed.bookTitle} by {borrowed.author} (Borrowed on: {new Date(borrowed.borrowedDate).toLocaleDateString()})
-              <button onClick={() => handleReturnBook(borrowed.book_id)}>Return</button>
+          {borrowedBooks.map((record) => (
+            <li key={record._id}>
+              {record.book_id.title} - Borrowed on {record.borrow_time}
+              <button onClick={() => handleReturnBook(record._id)}>Return</button>
             </li>
           ))}
         </ul>
