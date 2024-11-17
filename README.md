@@ -12,5 +12,9 @@ then install the backend dependencies (express, etc.):
 cd backend
 npm install
 ```
+I packed a few more packages
+front end: npm install axios jwt-decode react-router-dom
+backend: npm install cors
+
 
 
