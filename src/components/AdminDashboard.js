@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { bookService, borrowService, reservationService } from '../services/apiService';
-// import SearchBooks from './SearchBooks'; // 注释掉 SearchBooks 相关内容
+import SearchBooks from './SearchBooks';
 
 const AdminDashboard = () => {
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [borrowRecords, setBorrowRecords] = useState([]);
   const [reservationRequests, setReservationRequests] = useState([]);
-  const [form, setForm] = useState({ title: '', author: '', year: '' });
+  const [form, setForm] = useState({
+    title: '',
+    author: '',
+    isbn: '',
+    publisher: '',
+    year_published: '',
+    category: '',
+    quantity: '',
+  });
   const [message, setMessage] = useState('');
 
   // Fetch books, borrow records, and reservations
@@ -32,9 +40,32 @@ const AdminDashboard = () => {
   // Handle adding a book
   const handleAddBook = async () => {
     try {
-      const response = await bookService.addBook(form);
+      if (!form.title || !form.author || !form.isbn) {
+        setMessage('Title, Author, and ISBN are required.');
+        return;
+      }
+
+      const newBook = {
+        title: form.title,
+        author: form.author,
+        isbn: form.isbn,
+        publisher: form.publisher || '',
+        year_published: form.year_published || null,
+        category: form.category || '',
+        quantity: form.quantity || 1,
+      };
+
+      const response = await bookService.addBook(newBook);
       setBooks([...books, response.data]);
-      setForm({ title: '', author: '', year: '' });
+      setForm({
+        title: '',
+        author: '',
+        isbn: '',
+        publisher: '',
+        year_published: '',
+        category: '',
+        quantity: '',
+      });
       setMessage('Book added successfully!');
     } catch (error) {
       console.error('Error adding book:', error);
@@ -45,10 +76,33 @@ const AdminDashboard = () => {
   // Handle editing a book
   const handleEditBook = async () => {
     try {
-      const response = await bookService.updateBook(selectedBook._id, form);
+      if (!form.title || !form.author || !form.isbn) {
+        setMessage('Title, Author, and ISBN are required.');
+        return;
+      }
+
+      const updatedBook = {
+        title: form.title,
+        author: form.author,
+        isbn: form.isbn,
+        publisher: form.publisher || '',
+        year_published: form.year_published || null,
+        category: form.category || '',
+        quantity: form.quantity || 1,
+      };
+
+      const response = await bookService.updateBook(selectedBook._id, updatedBook);
       setBooks(books.map((book) => (book._id === selectedBook._id ? response.data : book)));
       setSelectedBook(null);
-      setForm({ title: '', author: '', year: '' });
+      setForm({
+        title: '',
+        author: '',
+        isbn: '',
+        publisher: '',
+        year_published: '',
+        category: '',
+        quantity: '',
+      });
       setMessage('Book updated successfully!');
     } catch (error) {
       console.error('Error editing book:', error);
@@ -73,7 +127,7 @@ const AdminDashboard = () => {
       <h1>Admin Dashboard</h1>
 
       {/* Search Books */}
-      {/* <SearchBooks /> */}
+      <SearchBooks />
 
       {/* Add or Edit Book */}
       <div>
@@ -91,10 +145,34 @@ const AdminDashboard = () => {
           onChange={(e) => setForm({ ...form, author: e.target.value })}
         />
         <input
+          type="text"
+          placeholder="ISBN"
+          value={form.isbn}
+          onChange={(e) => setForm({ ...form, isbn: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Publisher"
+          value={form.publisher}
+          onChange={(e) => setForm({ ...form, publisher: e.target.value })}
+        />
+        <input
           type="number"
-          placeholder="Year"
-          value={form.year}
-          onChange={(e) => setForm({ ...form, year: e.target.value })}
+          placeholder="Year Published"
+          value={form.year_published}
+          onChange={(e) => setForm({ ...form, year_published: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+        />
+        <input
+          type="number"
+          placeholder="Quantity"
+          value={form.quantity}
+          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
         />
         <button onClick={selectedBook ? handleEditBook : handleAddBook}>
           {selectedBook ? 'Update Book' : 'Add Book'}
@@ -106,7 +184,7 @@ const AdminDashboard = () => {
       <ul>
         {books.map((book) => (
           <li key={book._id}>
-            {book.title} by {book.author} ({book.year})
+            {book.title} by {book.author} (ISBN: {book.isbn})
             <button onClick={() => setSelectedBook(book)}>Edit</button>
             <button onClick={() => handleDeleteBook(book._id)}>Delete</button>
           </li>
@@ -118,7 +196,7 @@ const AdminDashboard = () => {
       <ul>
         {borrowRecords.map((record) => (
           <li key={record._id}>
-            {record.bookTitle} borrowed by {record.userName} on {record.borrowedDate}
+            {record.bookTitle} borrowed by {record.userName} on {new Date(record.borrowedDate).toLocaleDateString()}
           </li>
         ))}
       </ul>
@@ -128,7 +206,7 @@ const AdminDashboard = () => {
       <ul>
         {reservationRequests.map((request) => (
           <li key={request._id}>
-            {request.bookTitle} reserved by {request.userName} on {request.reservedDate}
+            {request.bookTitle} reserved by {request.userName} on {new Date(request.reservedDate).toLocaleDateString()}
           </li>
         ))}
       </ul>
