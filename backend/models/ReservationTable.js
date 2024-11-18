@@ -1,3 +1,5 @@
+// /backend/models/ReservationTable.js
+
 const mongoose = require('mongoose');
 
 // Define the schema for the ReservationTable model

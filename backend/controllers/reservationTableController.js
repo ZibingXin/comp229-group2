@@ -1,3 +1,5 @@
+// /backend/controllers/reservationTableController.js
+
 const ReservationTable = require('../models/ReservationTable');
 const Book = require('../models/Book');
 const mongoose = require('mongoose');

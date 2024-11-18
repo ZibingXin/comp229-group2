@@ -1,3 +1,5 @@
+// /backend/models/Book.js
+
 const mongoose = require('mongoose');
 
 // Define the schema for the Book model
@@ -12,4 +14,4 @@ const BookSchema = new mongoose.Schema({
 });
 
 // Export the model using the schema
-module.exports = mongoose.model('Book', BookSchema);  // Make sure BookSchema is used here
+module.exports = mongoose.model('Book', BookSchema);

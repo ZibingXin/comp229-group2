@@ -1,3 +1,5 @@
+// /backend/controllers/bookController.js
+
 const Book = require('../models/Book');
 
 // 1. Add a Book (POST /api/books)

@@ -1,3 +1,5 @@
+// /backend/models/BorrowRecord.js
+
 const mongoose = require('mongoose');
 
 // Define the schema for the BorrowRecord model
@@ -10,9 +12,9 @@ const BorrowRecordSchema = new mongoose.Schema({
   status: { 
     type: String, 
     required: true, 
-    enum: ['Borrowed', 'Returned']                     // Enum for status, allows only specific values
+    enum: ['Borrowed', 'Returned']                     // Enum for status
   }
 });
 
 // Export the model using the schema
-module.exports = mongoose.model('BorrowRecord', BorrowRecordSchema);  // Make sure BorrowRecordSchema is used here
+module.exports = mongoose.model('BorrowRecord', BorrowRecordSchema);
