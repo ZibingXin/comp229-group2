@@ -18,4 +18,15 @@ backend: npm install cors
 
 When running, please run the backend first and then the frontend
 
+Account and password for testing purposes
+user:
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123"
+}
+admin:
+adminuser
+adminuser@example.com
+Admin@67890
 

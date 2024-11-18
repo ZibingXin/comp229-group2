@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { bookService, borrowService, reservationService } from '../services/apiService';
+import BookForm from '../components/BookForm';
+import SearchBooks_admin from '../components/SearchBooks_admin';
+import BookList_admin from '../components/BookList_admin';
+import ReservationManager from '../components/ReservationManager';
+import BorrowedBooksManager from '../components/BorrowedBooksManager';
 
 const AdminDashboard = () => {
   const [books, setBooks] = useState([]);
@@ -155,7 +160,6 @@ const AdminDashboard = () => {
       const response = await borrowService.returnBook(returnData);
       console.log('Return response:', response.data);
 
-      // Increase book quantity by 1
       const bookToUpdate = books.find((book) => book._id === bookId);
       if (bookToUpdate) {
         await bookService.updateBook(bookId, {
@@ -163,7 +167,6 @@ const AdminDashboard = () => {
           quantity: bookToUpdate.quantity + 1,
         });
 
-        // Update books list
         setBooks(
           books.map((book) =>
             book._id === bookId
@@ -185,114 +188,45 @@ const AdminDashboard = () => {
   return (
     <div>
       <h1>Admin Dashboard</h1>
-
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {message && <p style={{ color: 'red' }}>{message}</p>}
 
-      <div>
-        <h2>{selectedBook ? 'Edit Book' : 'Add Book'}</h2>
-        <input
-          type="text"
-          placeholder="Title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Author"
-          value={form.author}
-          onChange={(e) => setForm({ ...form, author: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="ISBN"
-          value={form.isbn}
-          onChange={(e) => setForm({ ...form, isbn: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Publisher"
-          value={form.publisher}
-          onChange={(e) => setForm({ ...form, publisher: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Year Published"
-          value={form.year_published}
-          onChange={(e) => setForm({ ...form, year_published: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-        />
-        <button onClick={handleAddOrEditBook}>
-          {selectedBook ? 'Update Book' : 'Add Book'}
-        </button>
-        {selectedBook && (
-          <button onClick={() => setSelectedBook(null)}>Cancel Edit</button>
-        )}
-      </div>
+      <BookForm
+        form={form}
+        setForm={setForm}
+        selectedBook={selectedBook}
+        handleAddOrEditBook={handleAddOrEditBook}
+        cancelEdit={() => setSelectedBook(null)}
+      />
 
-      <div>
-        <h2>Book List</h2>
-        <ul>
-          {books.map((book) => (
-            <li key={book._id}>
-              {book.title} by {book.author} (ISBN: {book.isbn}) - Quantity: {book.quantity}
-              <button onClick={() => handleSelectBook(book)}>Edit</button>
-              <button onClick={() => handleDeleteBook(book._id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <SearchBooks_admin
+        handleSelectBook={handleSelectBook}
+        handleDeleteBook={handleDeleteBook}
+      />
 
-      <div>
-        <h2>Manage Reservations</h2>
-        <input
-          type="text"
-          placeholder="Enter User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        />
-        <button onClick={handleSearchReservations}>Search Reservations</button>
-        <ul>
-          {reservations.map((reservation) => (
-            <li key={reservation._id}>
-              {reservation.bookTitle} - Reserved on {reservation.reservationDate}
-              <button onClick={() => handleBorrowBook(reservation._id, reservation.bookId)}>Borrow</button>
-            </li>
-          ))}
-        </ul>
-      </div>
 
-      <div>
-        <h2>Manage Borrowed Books</h2>
-        <input
-          type="text"
-          placeholder="Enter User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        />
-        <button onClick={handleSearchBorrowedBooks}>Search Borrowed Books</button>
-        <ul>
-          {borrowedBooks.map((record) => (
-            <li key={record._id}>
-              {record.book_id?.title || 'Title not available'} - Borrowed on {record.borrow_time} - Status: {record.status}
-              <button onClick={() => handleReturnBook(record._id, record.book_id._id)}>Return</button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <BookList_admin
+        books={books}
+        handleSelectBook={handleSelectBook}
+        handleDeleteBook={handleDeleteBook}
+      />
+
+      <ReservationManager
+        userId={userId}
+        setUserId={setUserId}
+        reservations={reservations}
+        handleSearchReservations={handleSearchReservations}
+        handleBorrowBook={handleBorrowBook}
+      />
+
+      <BorrowedBooksManager
+        userId={userId}
+        setUserId={setUserId}
+        borrowedBooks={borrowedBooks}
+        handleSearchBorrowedBooks={handleSearchBorrowedBooks}
+        handleReturnBook={handleReturnBook}
+      />
     </div>
   );
 };
-
 export default AdminDashboard;

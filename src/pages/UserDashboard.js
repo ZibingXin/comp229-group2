@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import SearchBooks from './SearchBooks';
-import BookList from './BookList';
-import BorrowedBooks from './BorrowedBooks';
-import ReservedBooks from './ReservedBooks';
+import SearchBooks from '../components/SearchBooks';
+import BookList from '../components/BookList';
+import BorrowedBooks from '../components/BorrowedBooks';
+import ReservedBooks from '../components/ReservedBooks';
 import { bookService } from '../services/apiService';
 
 const UserDashboard = () => {
