@@ -1,5 +1,4 @@
-// /backend/models/Book.js
-
+const { type } = require('@testing-library/user-event/dist/type');
 const mongoose = require('mongoose');
 
 // Define the schema for the Book model
@@ -10,8 +9,10 @@ const BookSchema = new mongoose.Schema({
   publisher: { type: String },
   year_published: { type: Number },
   category: { type: String },
-  quantity: { type: Number }
+  quantity: { type: Number },
+  image:{type:String},
+  description:{type:String}
 });
 
 // Export the model using the schema
-module.exports = mongoose.model('Book', BookSchema);
+module.exports = mongoose.model('Book', BookSchema);  // Make sure BookSchema is used here
