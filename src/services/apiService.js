@@ -33,6 +33,7 @@ export const reservationService = {
   cancelReservation: (id) => apiClient.put(`/reservations/${id}/cancel`),
   getReservationById: (id) => apiClient.get(`/reservations/${id}`),
   getAllReservations: () => apiClient.get('/reservations'),
+  getUserReservations: (userId) => apiClient.get(`/reservations/user/${userId}`),
 };
 
 export default apiClient;

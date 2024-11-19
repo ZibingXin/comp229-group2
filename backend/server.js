@@ -17,7 +17,7 @@ app.use(express.json());
 // Cros-origin resource sharing (CORS)
 // This is used to allow cross-origin requests from the frontend to the backend server.
 app.use(cors({
-    origin: 'http://localhost:3001', 
+    origin: '*', 
     methods: 'GET, POST, PUT, DELETE, OPTIONS', 
     allowedHeaders: 'Content-Type, Authorization', 
 }));

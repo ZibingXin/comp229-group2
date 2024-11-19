@@ -110,7 +110,28 @@ exports.getAllReservations = async (req, res) => {
     }
 };
 
-// reservationTableController.js
+//5. Get Reservations by UserId
+exports.getUserReservations = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ error: 'Invalid user ID' });
+        }
+
+        const reservations = await ReservationTable.find({ userId })
+            .populate('bookId', 'title quantity') 
+            .select('bookTitle status reservationDate bookId'); 
+
+        res.status(200).json(reservations);
+    } catch (error) {
+        console.error('Error fetching user reservations:', error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+};
+
+
+// Delets all reservations (for testing)
 exports.deleteAllReservations = async (req, res) => {
     try {
         const result = await ReservationTable.deleteMany();
