@@ -5,12 +5,12 @@ const Book = require('../models/Book');
 // 1. Add a Book (POST /api/books)
 exports.addBook = async (req, res) => {
     try {
-        const { title, author, isbn, publisher, year_published, category, quantity } = req.body;
+        const { title, author, isbn, publisher, year_published, category, quantity, image, description } = req.body;
         const existingISBN = await Book.findOne({ isbn });
         if (existingISBN) {
         return res.status(400).json({ error: 'Book with the same ISBN already exists' });
         }
-        const book = new Book({ title, author, isbn, publisher, year_published, category, quantity });
+        const book = new Book({ title, author, isbn, publisher, year_published, category, quantity, image, description });
         await book.save();
         res.status(201).json(book);
     }catch (error) {
@@ -47,12 +47,12 @@ exports.getBookById = async (req, res) => {
 // 4. Update a Book by ID (PUT /api/books/:id)
 exports.updateBookById = async (req, res) => {
     try {
-        const { title, author, isbn, publisher, year_published, category, quantity } = req.body;
+        const { title, author, isbn, publisher, year_published, category, quantity, image, description } = req.body;
         const existingISBN = await Book.findOne({ isbn });
         if (existingISBN && existingISBN._id.toString() !== req.params.id) {
             return res.status(400).json({ error: 'Book with the same ISBN already exists' });
         }
-        const book = await Book.findByIdAndUpdate(req.params.id, { title, author, isbn, publisher, year_published, category, quantity }, { new: true });
+        const book = await Book.findByIdAndUpdate(req.params.id, { title, author, isbn, publisher, year_published, category, quantity, image, description }, { new: true });
         if (!book) {
             return res.status(404).json({ error: 'Book not found' });
         }
