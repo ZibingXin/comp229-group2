@@ -14,7 +14,7 @@ const reservationTableRoutes = require('./routes/ReservationTableRoutes');
 const app = express();
 app.use(express.json());
 
-// Cros-origin resource sharing (CORS)
+// Cross-origin resource sharing (CORS)
 // This is used to allow cross-origin requests from the frontend to the backend server.
 app.use(cors({
     origin: '*', 

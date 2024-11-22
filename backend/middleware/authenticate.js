@@ -1,6 +1,7 @@
 // /backend/middleware/authenticate.js
 // This middleware function handles token-based user authentication using JSON Web Tokens (JWT).
-// When a request is made to a protected route, this middleware checks for an Authorization header, extracts the token, and verifies it using a secret key (JWT_SECRET).
+// When a request is made to a protected route, this middleware checks for an Authorization header, 
+// extracts the token, and verifies it using a secret key (JWT_SECRET).
 
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "123"
