@@ -95,7 +95,7 @@ const formGroupStyle = {
 };
 
 const inputStyle = {
-  width: "100%",
+  width: "377px",
   padding: "10px",
   borderRadius: "5px",
   border: "1px solid #ccc",
