@@ -14,11 +14,14 @@ import ResetPassword from './pages/Auth/ResetPassword';
 function App() {
   // Manage the username state to track the logged-in user
   const [username, setUsername] = useState(null);
+  const handleLogout = () => {
+    setUsername(null); // Clear username state
+  };
 
   return (
     <Router>
       {/* Pass username to Navbar to dynamically update the UI */}
-      <Navbar username={username} />
+      <Navbar username={username} onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />

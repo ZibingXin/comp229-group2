@@ -100,4 +100,70 @@ body{
   text-decoration: underline;
 }
 
+/* Dropdown container */
+.dropdown {
+  position: relative; /* Necessary for positioning the dropdown menu */
+}
+
+/* Dropdown trigger (Hi Username) */
+.dropdown-trigger {
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer; /* Make it look clickable */
+  text-decoration: none;
+  color: #000;
+}
+
+/* Dropdown menu styling */
+.dropdown-menu {
+  position: absolute; /* Position the menu relative to the trigger */
+  top: 100%; /* Place the menu below the trigger */
+  right: 0; /* Align menu to the right */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: none; /* Initially hide the menu */
+  min-width: 150px; /* Ensure consistent menu width */
+  z-index: 1000; /* Ensure menu is above other elements */
+}
+
+/* Menu item styles */
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block; /* Ensure items are stacked vertically */
+  padding: 10px 15px;
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer; /* Make buttons clickable */
+  text-align: left; /* Align text to the left */
+  width: 100%;
+}
+
+/* Hover effect for menu items */
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #f5f5f5; /* Light grey background on hover */
+}
+
+/* Display the dropdown menu on hover */
+.dropdown:hover .dropdown-menu {
+  display: block; /* Show the menu when hovering over the dropdown */
+}
+
+/* Animation for dropdown menu (optional) */
+.dropdown-menu {
+  opacity: 0;
+  transform: translateY(-10px); /* Start slightly above */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth appearance */
+}
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0); /* Slide into position */
+}
+
 

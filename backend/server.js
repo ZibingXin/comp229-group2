@@ -16,10 +16,22 @@ app.use(express.json());
 
 // Cross-origin resource sharing (CORS)
 // This is used to allow cross-origin requests from the frontend to the backend server.
+const allowedOrigins = ['http://localhost:3001', 'http://localhost:3002'];
+
 app.use(cors({
-    origin: '*', 
-    methods: 'GET, POST, PUT, DELETE, OPTIONS', 
-    allowedHeaders: 'Content-Type, Authorization', 
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true); // Allow the request if origin is in the allowed list
+        } else {
+            callback(new Error('Not allowed by CORS')); // Block the request otherwise
+        }
+    },
+    credentials: true, // Allow cookies and credentials
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
 }));
 
 // Connect to MongoDB

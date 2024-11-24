@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import '../../style/authStyle.css'; 
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -18,13 +19,11 @@ function Register() {
     setError("");
     setSuccess("");
 
-    // Validation for password match
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
-    // Validation for agreement checkbox
     if (!agree) {
       setError("You must agree to the terms and conditions.");
       return;
@@ -50,118 +49,67 @@ function Register() {
   };
 
   return (
-    <div style={containerStyle}>
-    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Register</h2>
-    {error && <p style={errorStyle}>{error}</p>}
-    {success && <p style={successStyle}>{success}</p>}
-    <form onSubmit={handleSubmit} style={formStyle}>
-      <div style={formGroupStyle}>
-      <label>Username:</label>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-        style={inputStyle}
-      />
-      </div>
-      <div style={formGroupStyle}>
-      <label>Email:</label>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        style={inputStyle}
-      />
-      </div>
-      <div style={formGroupStyle}>
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        style={inputStyle}
-      />
-      </div>
-      <div style={formGroupStyle}>
-      <label>Confirm Password:</label>
-      <input
-        type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        required
-        style={inputStyle}
-      />
-      </div>
-      <div style={{ marginBottom: "15px", textAlign: "left" }}>
-      <label>
-        <input
-        type="checkbox"
-        checked={agree}
-        onChange={(e) => setAgree(e.target.checked)}
-        style={{ marginRight: "10px" }}
-        />
-        Agree with our terms of service and privacy policy
-      </label>
-      </div>
-      <button type="submit" style={buttonStyle}>
-        Submit
-      </button>
-    </form>
+    <div className="container">
+      <h2>Register</h2>
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-group">
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+        <div className="form-group">
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            className="input"
+          />
+        </div>
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
+            Agree with our terms of service and privacy policy
+          </label>
+        </div>
+        <button type="submit" className="button">
+          Submit
+        </button>
+      </form>
     </div>
   );
 }
-
-const containerStyle = {
-  maxWidth: "400px",
-  margin: "50px auto",
-  padding: "20px",
-  backgroundColor: "#f7fdfd",
-  borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  textAlign: "center",
-};
-
-const formStyle = {
-  display: "flex",
-  flexDirection: "column",
-};
-
-const formGroupStyle = {
-  marginBottom: "15px",
-  textAlign: "left",
-};
-
-const inputStyle = {
-  width: "377px",
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ccc",
-  marginTop: "5px",
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "10px",
-  backgroundColor: "#333",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-};
-
-const errorStyle = {
-  color: "red",
-  marginBottom: "15px",
-  textAlign: "center",
-};
-
-const successStyle = {
-  color: "green",
-  marginBottom: "15px",
-  textAlign: "center",
-};
 
 export default Register;

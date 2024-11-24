@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import '../../style/authStyle.css';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -31,7 +31,7 @@ function Login({ onLogin }) {
       }
 
       // Navigate to the dashboard
-      navigate("/user-dashboard");
+      navigate("/");
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error);
@@ -42,32 +42,32 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div style={containerStyle}>
+    <div className="container">
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Login</h2>
-      {error && <p style={errorStyle}>{error}</p>}
-      <form onSubmit={handleSubmit} style={formStyle}>
-        <div style={formGroupStyle}>
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-group">
           <label>Email:</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={inputStyle}
+            className="input"
           />
         </div>
-        <div style={formGroupStyle}>
+        <div className="form-group">
           <label>Password:</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={inputStyle}
+            className="input"
           />
         </div>
-        <div style={{ ...formGroupStyle, display: "flex", justifyContent: "space-between" }}>
-          <Link to="/forgot-password" style={smallLinkStyle}>
+        <div className="form-group" style={{ display: "flex", justifyContent: "space-between" }}>
+          <Link to="/forgot-password" className="small-link">
             Forget password?
           </Link>
           <label>
@@ -80,11 +80,11 @@ function Login({ onLogin }) {
             As Admin
           </label>
         </div>
-        <button type="submit" style={buttonStyle}>
+        <button type="submit" className="button">
           Sign in
         </button>
         <div style={{ textAlign: "center", marginTop: "10px" }}>
-          <Link to="/register" style={smallLinkStyle}>
+          <Link to="/register" className="small-link">
             Register Here
           </Link>
         </div>
@@ -92,55 +92,5 @@ function Login({ onLogin }) {
     </div>
   );
 }
-
-const containerStyle = {
-  maxWidth: "400px",
-  margin: "50px auto",
-  padding: "20px",
-  backgroundColor: "#f7fdfd",
-  borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  textAlign: "center",
-};
-
-const formStyle = {
-  display: "flex",
-  flexDirection: "column",
-};
-  
-const formGroupStyle = {
-  marginBottom: "15px",
-  textAlign: "left",
-};
-  
-const inputStyle = {
-  width: "377px",
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ccc",
-  marginTop: "5px",
-};
-  
-const buttonStyle = {
-  width: "100%",
-  padding: "10px",
-  backgroundColor: "#333",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-};
-  
-const smallLinkStyle = {
-  fontSize: "0.9rem",
-  textDecoration: "none",
-  color: "#007bff",
-};
-
-const errorStyle = {
-  color: "red",
-  marginBottom: "15px",
-  textAlign: "center",
-};
 
 export default Login;
