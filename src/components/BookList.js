@@ -39,7 +39,19 @@ const BookList = ({ books }) => {
       <ul>
         {books.map((book) => (
           <li key={book._id}>
-            {book.title} by {book.author}
+            {/* Display book title and author */}
+            <p>{book.title} by {book.author}</p>
+            
+            {/* Display book image */}
+            {book.image && (
+              <img 
+                src={book.image} 
+                alt={`Cover of ${book.title}`} 
+                style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
+              />
+            )}
+
+            {/* Reserve button */}
             <button onClick={() => handleReserve(book._id)}>Reserve</button>
           </li>
         ))}

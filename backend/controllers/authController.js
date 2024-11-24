@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
     const { email, password, role } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: 'Dose not find user with this email' });
+      return res.status(400).json({ error: 'Does not find user with this email' });
     }
     const isMatch = await bcrypt.compare(password, user.password); // compare password with hashed password
     if (!isMatch) {
@@ -57,12 +57,15 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
       expiresIn: '1h', // token expires in 1 hour
     });
-    res.status(200).json({ token });
+
+    // Return token and username to the client
+    res.status(200).json({ token, username: user.username });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
 };
+
 
 // logout a user
 exports.logout = (req, res) => {

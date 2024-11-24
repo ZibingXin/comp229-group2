@@ -1,11 +1,9 @@
 
 import React, { useState } from 'react';
-//import { authService } from '../services/apiService';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios';
 
-
-function Login() {
+function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,15 +15,24 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    try{
+    try {
       const role = isAdmin ? "admin" : "user";
       const response = await axios.post("http://localhost:3000/api/auth/login", { email, password, role });
       console.log("Login successful: ", response.data);
-      const token = response.data.token;
+
+      const { token, username } = response.data;
+
+      // Save the token in local storage
       localStorage.setItem('token', token);
-      // to home page or to profile page
-      navigate("/");
-    }catch (err) {
+
+      // Call the onLogin callback to update the username in App
+      if (onLogin) {
+        onLogin({ username });
+      }
+
+      // Navigate to the dashboard
+      navigate("/user-dashboard");
+    } catch (err) {
       if (err.response) {
         setError(err.response.data.error);
       } else {
@@ -65,10 +72,10 @@ function Login() {
           </Link>
           <label>
             <input
-            type="checkbox"
-            checked={isAdmin}
-            onChange={(e) => setIsAdmin(e.target.checked)}
-            style={{ marginRight: "10px" }}
+              type="checkbox"
+              checked={isAdmin}
+              onChange={(e) => setIsAdmin(e.target.checked)}
+              style={{ marginRight: "10px" }}
             />
             As Admin
           </label>
