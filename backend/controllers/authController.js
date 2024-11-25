@@ -130,3 +130,29 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+
+// update user's profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const { username, email } = req.body;
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(400).json({ error: 'User not found' });
+    }
+    if (username) {
+      user.username = username;
+    }
+    if (email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser && existingUser._id.toString() !== req.user.userId) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      user.email = email;
+    }
+    await user.save();
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
