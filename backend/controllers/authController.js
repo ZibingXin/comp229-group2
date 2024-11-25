@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
     });
 
     // Return token and username to the client
-    res.status(200).json({ token, username: user.username });
+    res.status(200).json({ token, username: user.username, email: user.email });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Something went wrong' });

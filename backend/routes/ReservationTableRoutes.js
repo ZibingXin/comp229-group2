@@ -10,6 +10,6 @@ router.put('/:id/cancel', cancelReservation);    // Cancel a reservation
 router.get('/:id', getReservationById);          // Get a reservation by id
 router.get('/', getAllReservations);             // Get all reservations
 router.delete('/', deleteAllReservations);       // Delete all reservations
-router.get('/user/:userId', getUserReservations);
+router.get('/user/:userId', getUserReservations);//Get Reservations by UserId
 
 module.exports = router;

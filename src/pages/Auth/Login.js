@@ -20,14 +20,14 @@ function Login({ onLogin }) {
       const response = await axios.post("http://localhost:3000/api/auth/login", { email, password, role });
       console.log("Login successful: ", response.data);
 
-      const { token, username } = response.data;
+      const { token, username, email: userEmail } = response.data;
 
       // Save the token in local storage
       localStorage.setItem('token', token);
 
       // Call the onLogin callback to update the username in App
       if (onLogin) {
-        onLogin({ username });
+        onLogin({ username, email: userEmail });
       }
 
       // Navigate to the dashboard
