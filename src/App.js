@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import Booklist from './pages/Booklist';
+import BookDetails from './pages/BookDetails';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import ForgetPassword from './pages/Auth/ForgetPassword';
@@ -48,6 +49,7 @@ console.log('Email:', email);
           element={<Login onLogin={handleLogin} />} 
         />
         <Route path="/bookList" element={<Booklist />} />
+        <Route path="/book/:id" element={<BookDetails />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
