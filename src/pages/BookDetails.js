@@ -14,7 +14,7 @@ function BookDetails() {
     // Fetch book details from the API
     const fetchBookDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/books/${id}`); // Update API URL as needed
+        const response = await fetch(`http://localhost:3000/api/books/${id}`); // Update API URL as needed
         if (!response.ok) {
           throw new Error("Failed to fetch book details");
         }
