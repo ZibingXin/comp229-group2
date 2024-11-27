@@ -53,6 +53,7 @@ console.log('Email:', email);
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/books/:id" element={<BookDetails />} />
       </Routes>
     </Router>
   );
