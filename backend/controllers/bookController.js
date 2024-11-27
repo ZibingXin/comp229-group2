@@ -23,13 +23,15 @@ exports.addBook = async (req, res) => {
 exports.getBooks = async (req, res) => {
     try {
         const books = await Book.find();
+        if (!books) {
+            return res.status(404).json({ error: 'No books found' });
+        }
         res.status(200).json(books);
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching books:', error);
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
-
 // 3. Get a Book by ID (GET /api/books/:id)
 exports.getBookById = async (req, res) => {
     try {
@@ -79,28 +81,21 @@ exports.deleteBookById = async (req, res) => {
 
 // 6. Search for Books by keywords (GET /api/books/search?q=...)
 exports.searchBooks = async (req, res) => {
-    function escapeRegex(text) {
-        return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-    }
-
     try {
-        const { q } = req.query;
-        if (!q) {
-            return res.status(400).json({ error: 'Please provide a search query' });
-        }
-        const sanitizedQuery = escapeRegex(q);
+        console.log('Search query:', req.query.q);
         const books = await Book.find({
             $or: [
-                { title: { $regex: sanitizedQuery, $options: 'i' } },
-                { author: { $regex: sanitizedQuery, $options: 'i' } },
-                { isbn: { $regex: sanitizedQuery, $options: 'i' } },
-                { publisher: { $regex: sanitizedQuery, $options: 'i' } },
-                { category: { $regex: sanitizedQuery, $options: 'i' } },
+                { title: { $regex: req.query.q || '', $options: 'i' } },
+                { author: { $regex: req.query.q || '', $options: 'i' } },
+                { isbn: { $regex: req.query.q || '', $options: 'i' } },
+                { publisher: { $regex: req.query.q || '', $options: 'i' } },
+                { category: { $regex: req.query.q || '', $options: 'i' } }
             ]
         });
+        console.log('Search results:', books);
         res.status(200).json(books);
     } catch (error) {
-        console.log(error);
+        console.error('Error in searchBooks:', error);
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
