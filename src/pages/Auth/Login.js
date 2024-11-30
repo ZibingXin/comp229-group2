@@ -31,7 +31,12 @@ function Login({ onLogin }) {
       }
 
       // Navigate to the dashboard
-      navigate("/");
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/');
+      }
+      
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error);
