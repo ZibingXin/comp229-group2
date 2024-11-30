@@ -1,0 +1,94 @@
+/* General styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .home-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .home-header {
+    display: flex;
+    height: 50vh;
+  }
+  
+  .logo {
+    flex: 1;
+  }
+  
+  .logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .header-banner {
+    flex: 1;
+    background: linear-gradient(to right, #a8d8f0, #63bce3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .banner-content {
+    color: #000;
+  }
+  
+  .subheading {
+    font-family: "Pacifico", cursive; /* Example of a handwriting font */
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .main-heading {
+    font-size: 36px;
+    font-weight: bold;
+  }
+  
+  .search-bar {
+    margin-top: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    font-size: 16px;
+    width: 250px;
+    margin-right: 10px;
+  }
+  
+  .search-button {
+    padding: 10px 20px;
+    background-color: #63bce3;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .search-button:hover {
+    background-color: #4aa3cc;
+  }
+  
+  .popular-books {
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin-top: 20px;
+  }
+  
+  .book-card img {
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
