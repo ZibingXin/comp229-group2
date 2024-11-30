@@ -40,7 +40,7 @@ function BookDetails() {
 
   return (
     <div className="book-details-container">
-      <Link to="/books" className="back-to-list">← Back to list</Link>
+      <Link to="/bookList" className="back-to-list">← Back to list</Link>
       <div className="book-details">
         <img
           src={book.image || "https://via.placeholder.com/200x300"}

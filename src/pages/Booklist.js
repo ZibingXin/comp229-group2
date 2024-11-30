@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchBooks from '../components/SearchBooks';
 import BookList from '../components/BookList';
+import SearchBar from '../components/SearchBar';
 import { bookService } from '../services/apiService';
 
 const Booklist = () => {
@@ -24,7 +25,7 @@ const Booklist = () => {
   
     return (
       <div>      
-        <SearchBooks />
+        <SearchBar />
         {loading ? (
           <p>Loading books...</p>
         ) : (

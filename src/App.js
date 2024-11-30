@@ -12,6 +12,7 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import ForgetPassword from './pages/Auth/ForgetPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
+import SearchBooks from './components/SearchBooks';
 
 function App() {
   // Manage the username state to track the logged-in user
@@ -54,6 +55,7 @@ console.log('Email:', email);
         <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/books/:id" element={<BookDetails />} />
+        <Route path='/searchBooks' element={<SearchBooks/>}/>
       </Routes>
     </Router>
   );

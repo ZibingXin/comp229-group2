@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import SearchBar from '../components/SearchBar';
 import "../style/Home.css";
 
 function Home() {
@@ -18,12 +19,7 @@ function Home() {
             <p className="subheading">Reading is the best to get idea</p>
             <h1 className="main-heading">Keep Reading</h1>
             <div className="search-bar">
-              <input
-                type="text"
-                placeholder="Search for a book..."
-                className="search-input"
-              />
-              <button className="search-button">FIND BOOK</button>
+            <SearchBar />
             </div>
           </div>
         </div>
