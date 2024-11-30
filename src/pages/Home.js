@@ -1,5 +1,6 @@
 import React from "react";
-import "../style/Home.css"; // Assuming you have CSS for styling
+import { Link } from 'react-router-dom';
+import "../style/Home.css";
 
 function Home() {
   return (
@@ -33,16 +34,24 @@ function Home() {
           <h2>Popular Books</h2>
           <div className="book-grid">
             <div className="book-card">
-            <img src="catcher-in-the-rye.jpeg" alt="The Catcher in the Rye" />
+              <Link to="/book/673793b98303ad48dd506228">
+                <img src="catcher-in-the-rye.jpeg" alt="The Catcher in the Rye" />
+              </Link>
             </div>
             <div className="book-card">
-              <img src="to-kill-a-mockingbird.jpeg" alt="To Kill a Mockingbird" />
+              <Link to="/book/673793298303ad48dd506219">
+                <img src="to-kill-a-mockingbird.jpeg" alt="To Kill a Mockingbird" />
+              </Link>
             </div>
             <div className="book-card">
-              <img src="1984.jpeg" alt="1984" />
+              <Link to="/book/673793988303ad48dd506222">
+                <img src="1984.jpeg" alt="1984" />
+              </Link>
             </div>
             <div className="book-card">
-              <img src="great-gatsby.jpeg" alt="The Great Gatsby" />
+              <Link to="/book/673793a98303ad48dd506225">
+                <img src="great-gatsby.jpeg" alt="The Great Gatsby" />
+              </Link>
             </div>
           </div>
         </section>
