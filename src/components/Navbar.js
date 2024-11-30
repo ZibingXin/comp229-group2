@@ -14,20 +14,17 @@ function Navbar({ username, onLogout }) { // Declare onLogout as a prop
 
   const handleLogout = async () => {
     try {
-      // Use GET request to match backend route
       await axios.get('http://localhost:3000/api/auth/logout', { withCredentials: true });
-  
-      // Notify parent component to reset username
       if (onLogout) {
-        onLogout(); // Reset username state in the parent component
+        onLogout();
       }
-  
-      // Redirect to login page
+      localStorage.removeItem('token'); 
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
+  
   
 
   return (

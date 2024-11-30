@@ -155,4 +155,25 @@ exports.updateProfile = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
+};exports.getMe = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'Authorization token is missing' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
 };

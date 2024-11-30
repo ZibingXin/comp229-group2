@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import Auth from './pages/Auth';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
@@ -15,9 +16,26 @@ import ResetPassword from './pages/Auth/ResetPassword';
 import SearchBooks from './components/SearchBooks';
 
 function App() {
-  // Manage the username state to track the logged-in user
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
+
+  // Fetch user info if token exists
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('http://localhost:3000/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((response) => {
+          setUsername(response.data.username);
+          setEmail(response.data.email);
+        })
+        .catch(() => {
+          // Token invalid or expired, clear localStorage
+          localStorage.removeItem('token');
+        });
+    }
+  }, []);
 
   const handleLogin = ({ username, email }) => {
     setUsername(username);
@@ -27,15 +45,11 @@ function App() {
   const handleLogout = () => {
     setUsername(null);
     setEmail(null);
+    localStorage.removeItem('token'); // Clear token on logout
   };
-
-  console.log('Username:', username);
-console.log('Email:', email);
-
 
   return (
     <Router>
-      {/* Pass username to Navbar to dynamically update the UI */}
       <Navbar username={username} onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -46,7 +60,6 @@ console.log('Email:', email);
         />
         <Route 
           path="/login" 
-          // Pass the onLogin callback to Login to update username upon login
           element={<Login onLogin={handleLogin} />} 
         />
         <Route path="/bookList" element={<Booklist />} />
@@ -54,8 +67,7 @@ console.log('Email:', email);
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/books/:id" element={<BookDetails />} />
-        <Route path='/searchBooks' element={<SearchBooks/>}/>
+        <Route path='/searchBooks' element={<SearchBooks/>} />
       </Routes>
     </Router>
   );
