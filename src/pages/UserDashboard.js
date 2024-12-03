@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BorrowedBooks from '../components/BorrowedBooks';
 import ReservedBooks from '../components/ReservedBooks';
 import { bookService } from '../services/apiService';
+import axios from 'axios';
 import '../style/dashboard.css';
 
 function UserDashboard({ username, email }) {
@@ -23,11 +24,37 @@ function UserDashboard({ username, email }) {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    console.log('Saved user info:', userInfo);
-    alert('User information saved!');
+  const handleSave = async () => {
+    const token = localStorage.getItem('token'); // 从 localStorage 获取 JWT
+  
+    if (!token) {
+      alert('You need to log in first.');
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        'http://localhost:3000/api/auth/update-profile',
+        {
+          username: userInfo.username,
+          email: userInfo.email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 在请求头中添加 JWT
+          },
+          withCredentials: true,
+        }
+      );
+  
+      console.log('Profile updated successfully:', response.data);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again later.');
+    }
   };
-
+  
   const handlePasswordChange = () => {
     navigate('/reset-password');
   };

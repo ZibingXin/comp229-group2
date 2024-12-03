@@ -134,28 +134,49 @@ exports.resetPassword = async (req, res) => {
 // update user's profile
 exports.updateProfile = async (req, res) => {
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: Token missing' });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET); 
+    } catch (err) {
+      return res.status(403).json({ error: 'Forbidden: Invalid token' });
+    }
+
+    const userId = decoded.userId; 
+
     const { username, email } = req.body;
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(userId); 
+
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
     }
+
     if (username) {
       user.username = username;
     }
     if (email) {
       const existingUser = await User.findOne({ email });
-      if (existingUser && existingUser._id.toString() !== req.user.userId) {
+      if (existingUser && existingUser._id.toString() !== userId) {
         return res.status(400).json({ error: 'Email already exists' });
       }
       user.email = email;
     }
+
     await user.save();
     res.status(200).json({ message: 'Profile updated successfully' });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
-};exports.getMe = async (req, res) => {
+};
+
+exports.getMe = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
