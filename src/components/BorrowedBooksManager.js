@@ -1,4 +1,5 @@
 import React from 'react';
+import "../style/borrowedBooks.css"; // 引入 borrowedBooks.css 文件
 
 const BorrowedBooksManager = ({
   userId,
@@ -7,20 +8,30 @@ const BorrowedBooksManager = ({
   handleSearchBorrowedBooks,
   handleReturnBook,
 }) => (
-  <div>
+  <div className="borrowed-books-manager">
     <h2>Manage Borrowed Books</h2>
     <input
       type="text"
       placeholder="Enter User ID"
       value={userId}
       onChange={(e) => setUserId(e.target.value)}
+      className="manager-input"
     />
-    <button onClick={handleSearchBorrowedBooks}>Search Borrowed Books</button>
-    <ul>
+    <button onClick={handleSearchBorrowedBooks} className="manager-button">
+      Search Borrowed Books
+    </button>
+    <ul className="borrowed-books-list">
       {borrowedBooks.map((record) => (
-        <li key={record._id}>
-          {record.book_id?.title || 'Title not available'} - Borrowed on {record.borrow_time} - Status: {record.status}
-          <button onClick={() => handleReturnBook(record._id, record.book_id._id)}>Return</button>
+        <li className="borrowed-book-item" key={record._id}>
+          <span className="book-title">{record.book_id?.title || 'Title not available'}</span>
+          <span> - Borrowed on {record.borrow_time}</span>
+          <span> - Status: {record.status}</span>
+          <button
+            onClick={() => handleReturnBook(record._id, record.book_id._id)}
+            className="return-button"
+          >
+            Return
+          </button>
         </li>
       ))}
     </ul>

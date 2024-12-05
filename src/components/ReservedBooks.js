@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { reservationService } from '../services/apiService';
 import { jwtDecode } from 'jwt-decode';
+import "../style/borrowedBooks.css"; // 引入 borrowedBooks.css 文件
 
 const ReservedBooks = () => {
   const [reservedBooks, setReservedBooks] = useState([]);
@@ -32,18 +33,9 @@ const ReservedBooks = () => {
 
   const handleCancel = async (reservationId) => {
     try {
-      const response = await reservationService.cancelReservation(reservationId);
-      setMessage(response.data.message || 'Reservation cancelled successfully!');
-
-
-      // Update books quantity when a reservation is canceled
-      const canceledBook = reservedBooks.find((book) => book._id === reservationId);
-      if (canceledBook) {
-        canceledBook.book.quantity += 1; // Increase quantity on cancel
-      }
-
-      setMessage('Reservation cancelled successfully!');
+      await reservationService.cancelReservation(reservationId);
       setReservedBooks(reservedBooks.filter((book) => book._id !== reservationId));
+      setMessage('Reservation cancelled successfully!');
     } catch (error) {
       setMessage('Failed to cancel reservation.');
       console.error('Error cancelling reservation:', error);
@@ -51,19 +43,40 @@ const ReservedBooks = () => {
   };
 
   return (
-    <div>
+    <div className="borrowed-books-container">
       <h1>Reserved Books</h1>
-      <ul>
+      {message && <p className="error-message">{message}</p>}
+      <div className="borrowed-books-list">
         {reservedBooks.map((book) => (
-          <li key={book._id}>
-            {book.bookTitle} (Status: {book.status})
-            {book.reservationDate && ` Reserved on: ${new Date(book.reservationDate).toLocaleDateString()}`}
-            {book.book && ` - Quantity: ${book.book.quantity}`}
-            <button onClick={() => handleCancel(book._id)}>Cancel Reservation</button>
-          </li>
+          <div className="borrowed-book-card" key={book._id}>
+            <div className="book-content">
+              <img
+                src={book.bookId?.image || "https://via.placeholder.com/150x200"}
+                alt={book.bookTitle || "Book cover"}
+                className="book-cover"
+              />
+              <div className="book-info">
+                <h2 className="book-title">{book.bookTitle || "Unknown Title"}</h2>
+                <span className="status-label reserved">{book.status}</span>
+                <div className="borrow-details">
+                  <p>
+                    <strong>Reserved on:</strong>{" "}
+                    {book.reservationDate
+                      ? new Date(book.reservationDate).toLocaleDateString()
+                      : "N/A"}
+                  </p>
+                  <p>
+                    <strong>Quantity:</strong> {book.bookId?.quantity || 0}
+                  </p>
+                  <button onClick={() => handleCancel(book._id)} className="cancel-button">
+                    Cancel Reservation
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
-      <p>{message}</p>
+      </div>
     </div>
   );
 };
