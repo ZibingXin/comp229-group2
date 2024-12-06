@@ -120,10 +120,7 @@ exports.getUserReservations = async (req, res) => {
         }
 
         const reservations = await ReservationTable.find({ userId })
-        .populate({
-            path: 'bookId',
-            select: 'title quantity image', // 加载 bookId 的 title, quantity 和 image
-        });
+        .populate('bookId', 'title quantity image');
         res.status(200).json(reservations);
     } catch (error) {
         console.error('Error fetching user reservations:', error);
