@@ -73,6 +73,7 @@
   }
 
 .manager-input {
+    width: 240px;
     padding: 8px;
     margin-right: 10px;
     border: 1px solid #ddd;

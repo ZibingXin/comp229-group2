@@ -114,7 +114,7 @@ function UserDashboard({ username, email }) {
 
   return (
     <div>
-      <h2>Good Evening! {userInfo.username}!</h2>
+      <h2 class='helloUser'>Good Evening! {userInfo.username}!</h2>
       <div className="user-dashboard">
         <div className="sidebar">
           <ul>
