@@ -19,11 +19,11 @@ const SearchBooks = () => {
     }
 
     // 检测页面刷新并跳转
-    if (window.performance) {
-      if (performance.navigation.type === 1) { // Detect page refresh
-        navigate('/bookList');
-      }
-    }
+    // if (window.performance) {
+    //   if (performance.navigation.type === 1) { // Detect page refresh
+    //     navigate('/bookList');
+    //   }
+    // }
   }, [location.state, navigate]);
 
   const handleSearch = async (searchQuery) => {
