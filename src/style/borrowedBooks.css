@@ -66,13 +66,12 @@
   }
   
   
-  img{
+  .book-content img{
     width: 150px !important;
     height: 200px;
     margin: 10px;
   }
 
-  /* 通用样式 */
 .manager-input {
     padding: 8px;
     margin-right: 10px;
