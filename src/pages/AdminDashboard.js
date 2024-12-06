@@ -111,7 +111,7 @@ const AdminDashboard = () => {
     try {
       const response = await reservationService.getAllReservations();
       const filteredReservations = response.data.filter(
-        (r) => r.userId === userId && r.status !== 'Canceled'
+        (r) => r.userId._id === userId && r.status !== 'Canceled' 
       );
       setReservations(filteredReservations);
       setMessage('');
@@ -120,6 +120,7 @@ const AdminDashboard = () => {
       setMessage('Failed to fetch reservations.');
     }
   };
+
 
   const handleSearchBorrowedBooks = async () => {
     try {
