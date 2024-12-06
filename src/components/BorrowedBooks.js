@@ -60,7 +60,7 @@ const BorrowedBooks = () => {
                       : "N/A"}
                   </p>
                   <p>
-                    <strong>Return Date (Planned):</strong>{" "}
+                    <strong>Planned Return Date:</strong>{" "}
                     {record.return_time
                       ? new Date(record.return_time).toLocaleDateString()
                       : "N/A"}
@@ -71,8 +71,8 @@ const BorrowedBooks = () => {
                       ? new Date(record.actual_return_time).toLocaleDateString()
                       : "N/A"}
                   </p>
-
                 </div>
+
               </div>
             </div>
           </div>

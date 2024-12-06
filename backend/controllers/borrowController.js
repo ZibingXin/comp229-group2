@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // 1. Borrow a Book (POST /api/borrows)
 exports.borrowBook = async (req, res) => {
     try {
-        const { user_id, book_id, borrow_time, return_time, status } = req.body;
+        const { user_id, book_id } = req.body;
 
         // Validate ObjectId
         if (!mongoose.Types.ObjectId.isValid(user_id) || !mongoose.Types.ObjectId.isValid(book_id)) {
@@ -19,21 +19,27 @@ exports.borrowBook = async (req, res) => {
             return res.status(400).json({ error: 'This book is already borrowed and not yet returned' });
         }
 
+        // Calculate return time as 7 days after borrow time
+        const borrow_time = new Date();
+        const return_time = new Date();
+        return_time.setDate(borrow_time.getDate() + 7); // Add 7 days to the borrow time
+
         const borrowRecord = new BorrowRecord({
             user_id,
             book_id,
-            borrow_time: borrow_time || new Date(),
-            return_time,
-            status: status || 'Borrowed'
+            borrow_time,
+            return_time, // Add planned return time
+            status: 'Borrowed',
         });
 
         await borrowRecord.save();
         res.status(201).json(borrowRecord);
     } catch (error) {
-        console.log(error);
+        console.error('Error borrowing book:', error);
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
+
 
 // 2. Get all Borrow Records (GET /api/borrows)
 exports.getBorrowedBooks = async (req, res) => {
