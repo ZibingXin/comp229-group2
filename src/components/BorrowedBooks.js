@@ -60,11 +60,18 @@ const BorrowedBooks = () => {
                       : "N/A"}
                   </p>
                   <p>
-                    <strong>Return Date:</strong>{" "}
+                    <strong>Return Date (Planned):</strong>{" "}
                     {record.return_time
                       ? new Date(record.return_time).toLocaleDateString()
                       : "N/A"}
                   </p>
+                  <p>
+                    <strong>Actual Return Date:</strong>{" "}
+                    {record.actual_return_time
+                      ? new Date(record.actual_return_time).toLocaleDateString()
+                      : "N/A"}
+                  </p>
+
                 </div>
               </div>
             </div>

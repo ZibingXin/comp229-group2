@@ -111,7 +111,7 @@ const AdminDashboard = () => {
     try {
       const response = await reservationService.getAllReservations();
       const filteredReservations = response.data.filter(
-        (r) => r.userId._id === userId && r.status !== 'Canceled' 
+        (r) => r.userId._id === userId && r.status === 'Reserved'
       );
       setReservations(filteredReservations);
       setMessage('');
@@ -125,13 +125,17 @@ const AdminDashboard = () => {
   const handleSearchBorrowedBooks = async () => {
     try {
       const response = await borrowService.getUserBorrowRecords(userId);
-      setBorrowedBooks(response.data);
+      const filteredBorrowedBooks = response.data.filter(
+        (record) => record.status !== 'Returned'
+      );
+      setBorrowedBooks(filteredBorrowedBooks);
       setMessage('');
     } catch (error) {
       console.error('Error searching borrowed books:', error);
       setMessage('Failed to fetch borrowed books.');
     }
   };
+  
 
   const handleBorrowBook = async (reservationId, bookId) => {
     try {
@@ -139,15 +143,18 @@ const AdminDashboard = () => {
         user_id: userId,
         book_id: bookId,
       };
-
+  
       await borrowService.borrowBook(borrowData);
+      await reservationService.finishReservation(reservationId);
+  
       setMessage('Book borrowed successfully!');
-      handleSearchReservations();
+      handleSearchReservations(); 
     } catch (error) {
       console.error('Error borrowing book:', error);
       setMessage('Failed to borrow book.');
     }
   };
+  
 
   const handleReturnBook = async (borrowId, bookId) => {
     try {
