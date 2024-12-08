@@ -3,6 +3,7 @@ import { reservationService } from '../services/apiService';
 import { jwtDecode } from 'jwt-decode';
 import mongoose from 'mongoose';
 import { Link } from 'react-router-dom'; // Import Link for navigation
+import "../style/BookList.css";
 
 const BookList = ({ books }) => {
   const [message, setMessage] = useState('');
@@ -41,13 +42,11 @@ const BookList = ({ books }) => {
 
   return (
     <div>
-
       <ul>
         {books.map((book) => (
-          <li key={book._id}>
+          <li class="book-details" key={book._id}>
             {/* Display book title and author */}
-            <p>{book.title} by {book.author}</p>
-            
+      
             {/* Display book cover image, if available */}
             {book.image && (
               <img 
@@ -56,20 +55,24 @@ const BookList = ({ books }) => {
                 style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
               />
             )}
-
-            {/* Reserve button to call handleReserve function */}
-            <button onClick={() => handleReserve(book._id)}>Reserve</button>
-
-            {/* Details button to navigate to the dynamic detail page */}
-            <Link to={`/book/${book._id}`}>
+            <div class="book-info">
+              <p>{book.title}</p>
+              <p>{book.author}</p>
+              <p>{book.publisher}, {book.year_published}</p>
+              <p>{book.category}</p>
+              {/* Reserve button to call handleReserve function */}
+              <button onClick={() => handleReserve(book._id)}>Reserve</button>
+              {/* Details button to navigate to the dynamic detail page */}
+              <Link to={`/book/${book._id}`}>
               <button>Details</button>
-            </Link>
+              </Link>
+            </div>
           </li>
         ))}
       </ul>
       {/* Display success or error message */}
       <p>{message}</p>
-    </div>
+    </div>  
   );
 };
 

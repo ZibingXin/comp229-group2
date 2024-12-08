@@ -1,7 +1,7 @@
 import React from 'react';
 
 const BookList = ({ books, handleSelectBook, handleDeleteBook }) => (
-  <div>
+  <div class="list">
     <h2>Book List</h2>
     <ul>
       {books.map((book) => (

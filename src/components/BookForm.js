@@ -7,7 +7,7 @@ const BookForm = ({
   handleAddOrEditBook,
   cancelEdit,
 }) => (
-  <div>
+  <div class="list">
     <h2>{selectedBook ? 'Edit Book' : 'Add Book'}</h2>
     <input
       type="text"

@@ -3,6 +3,7 @@ import SearchBooks from '../components/SearchBooks';
 import BookList from '../components/BookList';
 import SearchBar from '../components/SearchBar';
 import { bookService } from '../services/apiService';
+import "../style/BookList.css";
 
 const Booklist = () => {
     const [books, setBooks] = useState([]); 
@@ -24,8 +25,8 @@ const Booklist = () => {
     }, []);
   
     return (
-      <div>      
-        <SearchBar />
+      <div class="list">      
+        <SearchBar/>
         {loading ? (
           <p>Loading books...</p>
         ) : (

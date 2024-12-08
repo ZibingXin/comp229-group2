@@ -3,6 +3,7 @@ import { bookService, reservationService } from '../services/apiService';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import mongoose from 'mongoose';
+import "../style/BookList.css";
 
 const SearchBooks = () => {
   const [query, setQuery] = useState('');
@@ -19,11 +20,11 @@ const SearchBooks = () => {
     }
 
     // 检测页面刷新并跳转
-    if (window.performance) {
-      if (performance.navigation.type === 1) { // Detect page refresh
-        navigate('/bookList');
-      }
-    }
+    // if (window.performance) {
+    //   if (performance.navigation.type === 1) { // Detect page refresh
+    //     navigate('/bookList');
+    //   }
+    // }
   }, [location.state, navigate]);
 
   const handleSearch = async (searchQuery) => {
@@ -62,7 +63,7 @@ const SearchBooks = () => {
   };
 
   return (
-    <div>
+    <div class="list">
       <input
         type="text"
         placeholder="Enter book title or author"
@@ -70,10 +71,10 @@ const SearchBooks = () => {
         onChange={(e) => setQuery(e.target.value)}
       />
       <button onClick={() => handleSearch()}>Search</button>
+      <p>Searched Results:</p>
       <ul>
         {books.map((book) => (
-          <li key={book._id}>
-            <p>{book.title} by {book.author}</p>
+          <li class="book-details" key={book._id}>
             {book.image && (
               <img 
                 src={book.image} 
@@ -81,10 +82,18 @@ const SearchBooks = () => {
                 style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
               />
             )}
-            <button onClick={() => handleReserve(book._id)}>Reserve</button>
-            <Link to={`/book/${book._id}`}>
+            <div class="book-info">
+              <p>{book.title}</p>
+              <p>{book.author}</p>
+              <p>{book.publisher}, {book.year_published}</p>
+              <p>{book.category}</p>
+              {/* Reserve button to call handleReserve function */}
+              <button onClick={() => handleReserve(book._id)}>Reserve</button>
+              {/* Details button to navigate to the dynamic detail page */}
+              <Link to={`/book/${book._id}`}>
               <button>Details</button>
-            </Link>
+              </Link>
+            </div>
           </li>
         ))}
       </ul>
