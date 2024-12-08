@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/BookRoutes');
 const borrowRoutes = require('./routes/BorrowRoutes');
 const reservationTableRoutes = require('./routes/ReservationTableRoutes');
+const contactRoutes = require('./routes/ContactRoutes');
 
 const app = express();
 app.use(express.json());
@@ -49,6 +50,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes); 
 app.use('/api/borrows', borrowRoutes); 
 app.use('/api/reservations', reservationTableRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Start server
 app.listen(3000, () => {

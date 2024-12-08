@@ -37,4 +37,10 @@ export const reservationService = {
   finishReservation: (id) => apiClient.put(`/reservations/${id}/finish`),
 };
 
+export const contactService = {
+  submitContactForm: (contactData) => apiClient.post('/contact/submit', contactData),
+  getAllContacts: () => apiClient.get('/contact/getall'),
+};
+
+
 export default apiClient;

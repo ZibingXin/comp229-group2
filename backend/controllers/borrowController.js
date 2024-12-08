@@ -61,7 +61,7 @@ exports.getBorrowRecordsByUserId = async (req, res) => {
             return res.status(400).json({ error: 'Invalid user_id' });
         }
 
-        const borrowRecords = await BorrowRecord.find({ user_id }).populate('book_id', 'title image');
+        const borrowRecords = await BorrowRecord.find({ user_id }).populate('book_id', 'title image').sort({ borrow_time: -1 });;
         if (borrowRecords.length === 0) {
             return res.status(404).json({ error: 'No borrow records found for this user' });
         }
