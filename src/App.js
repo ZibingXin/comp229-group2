@@ -14,6 +14,8 @@ import Register from './pages/Auth/Register';
 import ForgetPassword from './pages/Auth/ForgetPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import SearchBooks from './components/SearchBooks';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 function App() {
   const [username, setUsername] = useState(null);
@@ -68,6 +70,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path='/searchBooks' element={<SearchBooks/>} />
+        <Route path='/about' element={<About/>}/>
+        <Route path='/contact' element={<Contact/>}/>
       </Routes>
     </Router>
   );

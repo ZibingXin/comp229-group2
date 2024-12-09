@@ -85,7 +85,7 @@ exports.getReservationById = async (req, res) => {
 
         // Find the reservation and populate user info
         const reservation = await ReservationTable.findById(id)
-            .populate('userId', 'name');
+            .populate('userId', 'name').sort({ reservationDate: -1 });;
         if (!reservation) {
             return res.status(404).json({ error: 'Reservation not found' });
         }
@@ -102,7 +102,7 @@ exports.getAllReservations = async (req, res) => {
     try {
         // Find all reservations and populate user info
         const reservations = await ReservationTable.find()
-            .populate('userId', 'name');
+            .populate('userId', 'name').sort({ reservationDate: -1 });;
         res.status(200).json(reservations);
     } catch (error) {
         console.error(error);
@@ -120,15 +120,38 @@ exports.getUserReservations = async (req, res) => {
         }
 
         const reservations = await ReservationTable.find({ userId })
-            .populate('bookId', 'title quantity') 
-            .select('bookTitle status reservationDate bookId'); 
-
+        .populate('bookId', 'title quantity image').sort({ reservationDate: -1 });
         res.status(200).json(reservations);
     } catch (error) {
         console.error('Error fetching user reservations:', error);
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
+
+exports.finishReservation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid reservation ID' });
+        }
+
+        const reservation = await ReservationTable.findById(id);
+        if (!reservation || reservation.status !== 'Reserved') {
+            return res.status(404).json({ error: 'Reservation not found or not in Reserved status' });
+        }
+
+        reservation.status = 'Finished';
+        await reservation.save();
+
+        res.status(200).json({ message: 'Reservation status updated to Finished', reservation });
+    } catch (error) {
+        console.error('Error updating reservation status:', error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+};
+
+
 
 
 // Delets all reservations (for testing)
