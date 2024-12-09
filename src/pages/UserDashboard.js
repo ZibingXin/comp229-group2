@@ -25,7 +25,7 @@ function UserDashboard({ username, email }) {
   };
 
   const handleSave = async () => {
-    const token = localStorage.getItem('token'); // 从 localStorage 获取 JWT
+    const token = localStorage.getItem('token'); 
   
     if (!token) {
       alert('You need to log in first.');
@@ -41,7 +41,7 @@ function UserDashboard({ username, email }) {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // 在请求头中添加 JWT
+            Authorization: `Bearer ${token}`, 
           },
           withCredentials: true,
         }

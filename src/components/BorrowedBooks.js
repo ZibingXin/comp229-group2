@@ -12,7 +12,7 @@ const BorrowedBooks = () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          setMessage("User not logged in.");
+          alert("User not logged in.");
           return;
         }
 
@@ -23,7 +23,7 @@ const BorrowedBooks = () => {
         setBorrowedBooks(response.data);
       } catch (error) {
         console.error("Error fetching borrowed books:", error);
-        setMessage("Failed to fetch borrowed books.");
+        alert("Failed to fetch borrowed books.");
       }
     };
 

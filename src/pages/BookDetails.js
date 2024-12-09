@@ -37,7 +37,7 @@ function BookDetails() {
       // Retrieve user token from localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        setMessage("User not logged in.");
+        alert("User not logged in.");
         return;
       }
 
@@ -52,10 +52,10 @@ function BookDetails() {
       });
 
       // Set success message upon successful reservation
-      setMessage("Book reserved successfully!");
+      alert("Book reserved successfully!");
     } catch (error) {
       // Handle any errors during reservation
-      setMessage("Failed to reserve book.");
+      alert("Failed to reserve book.");
       console.error("Error reserving book:", error);
     }
   };
@@ -89,7 +89,6 @@ function BookDetails() {
             Reserve
           </button>
           {/* Display success or error message */}
-          {message && <p>{message}</p>}
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ const ReservedBooks = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          setMessage('User not logged in.');
+          alert('User not logged in.');
           return;
         }
 
@@ -24,7 +24,7 @@ const ReservedBooks = () => {
         setReservedBooks(response.data);
       } catch (error) {
         console.error('Error fetching reserved books:', error);
-        setMessage('Failed to fetch reserved books.');
+        alert('Failed to fetch reserved books.');
       }
     };
 
@@ -35,9 +35,9 @@ const ReservedBooks = () => {
     try {
       await reservationService.cancelReservation(reservationId);
       setReservedBooks(reservedBooks.filter((book) => book._id !== reservationId));
-      setMessage('Reservation cancelled successfully!');
+      alert('Reservation cancelled successfully!');
     } catch (error) {
-      setMessage('Failed to cancel reservation.');
+      alert('Failed to cancel reservation.');
       console.error('Error cancelling reservation:', error);
     }
   };

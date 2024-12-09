@@ -38,7 +38,7 @@ const SearchBooks = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        setMessage('User not logged in.');
+        alert('User not logged in.');
         return;
       }
 
@@ -53,9 +53,9 @@ const SearchBooks = () => {
         bookId: objectIdBookId,
       });
 
-      setMessage('Book reserved successfully!');
+      alert('Book reserved successfully!');
     } catch (error) {
-      setMessage('Failed to reserve book.');
+      alert('Failed to reserve book.');
       console.error('Error reserving book:', error);
     }
   };

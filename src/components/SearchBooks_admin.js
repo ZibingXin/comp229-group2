@@ -14,7 +14,7 @@ const SearchBooks = ({ handleSelectBook, handleDeleteBook }) => {
       setBooks(response.data);
     } catch (error) {
       console.error('Error searching books:', error);
-      setMessage('Failed to search books.');
+      alert('Failed to search books.');
     }
   };
 
