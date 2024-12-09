@@ -20,6 +20,8 @@ const AdminDashboard = () => {
     year_published: '',
     category: '',
     quantity: '',
+    image: '',
+    description: '', 
   });
   const [message, setMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -75,6 +77,8 @@ const AdminDashboard = () => {
         year_published: '',
         category: '',
         quantity: '',
+        image: '',
+        description: '', 
       });
       setSelectedBook(null);
     } catch (error) {
@@ -93,6 +97,8 @@ const AdminDashboard = () => {
       year_published: book.year_published,
       category: book.category,
       quantity: book.quantity,
+      image: book.image, 
+      description: book.description, 
     });
   };
 
@@ -199,6 +205,23 @@ const AdminDashboard = () => {
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
       {message && <p style={{ color: 'red' }}>{message}</p>}
 
+      <ReservationManager
+        userId={userId}
+        setUserId={setUserId}
+        reservations={reservations}
+        handleSearchReservations={handleSearchReservations}
+        handleBorrowBook={handleBorrowBook}
+      />
+      <br></br>
+
+      <BorrowedBooksManager
+        userId={userId}
+        setUserId={setUserId}
+        borrowedBooks={borrowedBooks}
+        handleSearchBorrowedBooks={handleSearchBorrowedBooks}
+        handleReturnBook={handleReturnBook}
+      />
+
       <BookForm
         form={form}
         setForm={setForm}
@@ -217,22 +240,6 @@ const AdminDashboard = () => {
         books={books}
         handleSelectBook={handleSelectBook}
         handleDeleteBook={handleDeleteBook}
-      />
-
-      <ReservationManager
-        userId={userId}
-        setUserId={setUserId}
-        reservations={reservations}
-        handleSearchReservations={handleSearchReservations}
-        handleBorrowBook={handleBorrowBook}
-      />
-
-      <BorrowedBooksManager
-        userId={userId}
-        setUserId={setUserId}
-        borrowedBooks={borrowedBooks}
-        handleSearchBorrowedBooks={handleSearchBorrowedBooks}
-        handleReturnBook={handleReturnBook}
       />
     </div>
   );

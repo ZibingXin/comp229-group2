@@ -84,24 +84,33 @@
   }  
     
   #contact-form input[type="submit"] {  
-    background-color:#4caf50;  
-    color: white;  
-    border: none;  
+    width: 100px;
+    color: #fff;
+    padding: 8px 12px;
+    background-color: #9ccaa6;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
     margin-right: 10px;
   }  
     
   #contact-form input[type="submit"]:hover {  
-    background-color: #45a049;  
+    background-color: #666;  
     transform: scale(1.05);
   }  
     
   #contact-form input[type="reset"] {  
-    background-color:#2196f3; 
-    color: white;  
-    border: none;  
+    width: 100px;
+    color: #fff;
+    padding: 8px 12px;
+    background-color: #9ccaa6;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-right: 10px;  
   }  
     
   #contact-form input[type="reset"]:hover {  
-    background-color:#1e88e5; 
+    background-color: #666; 
     transform: scale(1.05);
   }  

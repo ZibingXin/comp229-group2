@@ -4,7 +4,7 @@ import "../style/about&contact.css"
 
 function About() {
   return (
-    <div class='about-container'>
+    <div className='about-container'>
       <img
             src="Logo.png"
             alt="Group Logo"

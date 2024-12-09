@@ -1,4 +1,5 @@
 import React from 'react';
+import "../style/BookList.css";
 
 const BookForm = ({
   form,
@@ -7,7 +8,7 @@ const BookForm = ({
   handleAddOrEditBook,
   cancelEdit,
 }) => (
-  <div class="list">
+  <div className="book-form">
     <h2>{selectedBook ? 'Edit Book' : 'Add Book'}</h2>
     <input
       type="text"
@@ -50,6 +51,17 @@ const BookForm = ({
       placeholder="Quantity"
       value={form.quantity}
       onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+    />
+    <input
+      type="text"
+      placeholder="Image URL"
+      value={form.image}
+      onChange={(e) => setForm({ ...form, image: e.target.value })}
+    />
+    <textarea
+      placeholder="Description"
+      value={form.description}
+      onChange={(e) => setForm({ ...form, description: e.target.value })}
     />
     <button onClick={handleAddOrEditBook}>
       {selectedBook ? 'Update Book' : 'Add Book'}

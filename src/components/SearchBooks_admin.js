@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { bookService, reservationService } from '../services/apiService';
+import "../style/BookList.css";
 
 const SearchBooks = ({ handleSelectBook, handleDeleteBook }) => {
   const [query, setQuery] = useState('');
@@ -18,26 +19,43 @@ const SearchBooks = ({ handleSelectBook, handleDeleteBook }) => {
   };
 
   return (
-    <div>
-      <h1>Search Books</h1>
-      <input
+    <div className="list">
+      <div className='search'>      
+        <input
         type="text"
         placeholder="Enter book title or author"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-      <ul>
-        {books.map((book) => (
-          <li key={book._id}>
-            {book.title} by {book.author}
+        />
+        <button onClick={() => handleSearch()}>Search</button>
+      </div>
+
+    <p>Searched Results:</p>
+    <ul>
+      {books.map((book) => (
+        <li className="book-details" key={book._id}>
+          {book.image && (
+            <img 
+              src={book.image || "https://via.placeholder.com/100x150"} 
+              alt={`Cover of ${book.title}`} 
+              style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
+            />
+          )}
+          <div className="book-info">
+          <p>{book.title} by {book.author} (ISBN: {book.isbn})</p>
+            <p><strong>Publisher:</strong> {book.publisher}</p>
+            <p><strong>Published Year:</strong> {book.year_published}</p>
+            <p><strong>Category:</strong> {book.category}</p>
+            <p>{book.description}</p>
+            <p>Quantity: {book.quantity}</p>
             <button onClick={() => handleSelectBook(book)}>Edit</button>
             <button onClick={() => handleDeleteBook(book._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <p>{message}</p>
-    </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p>{message}</p>
+  </div>      
   );
 };
 

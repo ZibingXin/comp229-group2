@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "../style/BookList.css";
 
 function SearchBar() {
   const [query, setQuery] = useState('');
@@ -12,7 +13,7 @@ function SearchBar() {
   };
 
   return (
-    <div>
+    <div className='search'>
       <input
         type="text"
         placeholder="Enter book title or author"

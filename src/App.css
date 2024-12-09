@@ -37,6 +37,24 @@
   }
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; 
+}
+
+
+.main {
+  flex: 1; 
+  height: 100%;
+}
+
 body{
   background-color: #E0EEED;
 }
@@ -166,4 +184,11 @@ body{
   transform: translateY(0); /* Slide into position */
 }
 
+.foot{
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+  text-align: center;
+  padding: 20px 0;
+  font-family: 'Roboto', sans-serif;
+}
 

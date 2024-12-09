@@ -7,6 +7,14 @@ import "../style/BookList.css";
 
 const BookList = ({ books }) => {
   const [message, setMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(books.length / itemsPerPage);
+
+  const getCurrentPageBooks = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return books.slice(startIndex, startIndex + itemsPerPage);
+  };
 
   const handleReserve = async (bookId) => {
     try {
@@ -43,19 +51,18 @@ const BookList = ({ books }) => {
   return (
     <div>
       <ul>
-        {books.map((book) => (
-          <li class="book-details" key={book._id}>
-            {/* Display book title and author */}
+        {getCurrentPageBooks().map((book) => (
+          <li className='book-details' key={book._id}>
       
             {/* Display book cover image, if available */}
-            {book.image && (
+            {book.image  && (
               <img 
-                src={book.image} 
+                src={book.image || "https://via.placeholder.com/100x150"} 
                 alt={`Cover of ${book.title}`} 
                 style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
               />
             )}
-            <div class="book-info">
+            <div className='book-info'>
               <p>{book.title}</p>
               <p>{book.author}</p>
               <p>{book.publisher}, {book.year_published}</p>
@@ -70,8 +77,24 @@ const BookList = ({ books }) => {
           </li>
         ))}
       </ul>
-      {/* Display success or error message */}
-      <p>{message}</p>
+      <div className="pagination">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
+      <br></br>
     </div>  
   );
 };

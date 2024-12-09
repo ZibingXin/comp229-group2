@@ -25,7 +25,7 @@ const Booklist = () => {
     }, []);
   
     return (
-      <div class="list">      
+      <div className='list'>      
         <SearchBar/>
         {loading ? (
           <p>Loading books...</p>

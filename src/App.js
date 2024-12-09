@@ -16,6 +16,7 @@ import ResetPassword from './pages/Auth/ResetPassword';
 import SearchBooks from './components/SearchBooks';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Footer from './components/Footer';
 
 function App() {
   const [username, setUsername] = useState(null);
@@ -52,27 +53,30 @@ function App() {
 
   return (
     <Router>
-      <Navbar username={username} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route 
-          path="/user-dashboard" 
-          element={<UserDashboard username={username} email={email} />} 
-        />
-        <Route 
-          path="/login" 
-          element={<Login onLogin={handleLogin} />} 
-        />
-        <Route path="/bookList" element={<Booklist />} />
-        <Route path="/book/:id" element={<BookDetails />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgetPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path='/searchBooks' element={<SearchBooks/>} />
-        <Route path='/about' element={<About/>}/>
-        <Route path='/contact' element={<Contact/>}/>
-      </Routes>
+        <Navbar username={username} onLogout={handleLogout} />
+        <div className="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route 
+              path="/user-dashboard" 
+              element={<UserDashboard username={username} email={email} />} 
+            />
+            <Route 
+              path="/login" 
+              element={<Login onLogin={handleLogin} />} 
+            />
+            <Route path="/bookList" element={<Booklist />} />
+            <Route path="/book/:id" element={<BookDetails />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path='/searchBooks' element={<SearchBooks/>} />
+            <Route path='/about' element={<About/>}/>
+            <Route path='/contact' element={<Contact/>}/>
+          </Routes>
+        </div>
+        <Footer />
     </Router>
   );
 }

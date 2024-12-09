@@ -10,16 +10,14 @@ const SearchBooks = () => {
   const [books, setBooks] = useState([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const location = useLocation(); // 用于接收从 SearchBar 传递的数据
+  const location = useLocation(); 
 
   useEffect(() => {
-    // 自动检测是否有从 SearchBar 传递的搜索关键词
     if (location.state?.query) {
       setQuery(location.state.query);
       handleSearch(location.state.query);
     }
 
-    // 检测页面刷新并跳转
     // if (window.performance) {
     //   if (performance.navigation.type === 1) { // Detect page refresh
     //     navigate('/bookList');
@@ -63,26 +61,29 @@ const SearchBooks = () => {
   };
 
   return (
-    <div class="list">
-      <input
+    <div className="list">
+      <div className='search'>      
+        <input
         type="text"
         placeholder="Enter book title or author"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={() => handleSearch()}>Search</button>
+        />
+        <button onClick={() => handleSearch()}>Search</button>
+      </div>
+
       <p>Searched Results:</p>
       <ul>
         {books.map((book) => (
-          <li class="book-details" key={book._id}>
+          <li className="book-details" key={book._id}>
             {book.image && (
               <img 
-                src={book.image} 
+                src={book.image || "https://via.placeholder.com/100x150"} 
                 alt={`Cover of ${book.title}`} 
                 style={{ width: '100px', height: '150px', objectFit: 'cover' }} 
               />
             )}
-            <div class="book-info">
+            <div className="book-info">
               <p>{book.title}</p>
               <p>{book.author}</p>
               <p>{book.publisher}, {book.year_published}</p>
