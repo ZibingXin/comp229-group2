@@ -13,7 +13,7 @@ function ForgetPassword() {
     setSuccess("");
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/forgot-password", {
+      const response = await axios.post(process.env.BASE_URL + "/auth/forgot-password", {
         email,
       });
       setSuccess("Password reset link sent to your email!");

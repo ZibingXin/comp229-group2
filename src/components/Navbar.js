@@ -14,7 +14,7 @@ function Navbar({ username, onLogout }) { // Declare onLogout as a prop
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:3000/api/auth/logout', { withCredentials: true });
+      await axios.get(process.env.BASE_URL + '/auth/logout', { withCredentials: true });
       if (onLogout) {
         onLogout();
       }

@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Cross-origin resource sharing (CORS)
 // This is used to allow cross-origin requests from the frontend to the backend server.
-const allowedOrigins = ['http://localhost:3001', 'http://localhost:3002', 'https://group2library.netlify.app/'];
+const allowedOrigins = ['http://localhost:3001', 'https://group2library.netlify.app/'];
 
 app.use(cors({
     origin: (origin, callback) => {

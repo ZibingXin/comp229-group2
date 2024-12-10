@@ -34,7 +34,7 @@ function UserDashboard({ username, email }) {
   
     try {
       const response = await axios.put(
-        'http://localhost:3000/api/auth/update-profile',
+        process.env.BASE_URL + '/auth/update-profile',
         {
           username: userInfo.username,
           email: userInfo.email,

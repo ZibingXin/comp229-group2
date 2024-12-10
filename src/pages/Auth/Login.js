@@ -17,7 +17,7 @@ function Login({ onLogin }) {
 
     try {
       const role = isAdmin ? "admin" : "user";
-      const response = await axios.post("http://localhost:3000/api/auth/login", { email, password, role });
+      const response = await axios.post(process.env.BASE_URL + "/auth/login", { email, password, role });
       console.log("Login successful: ", response.data);
 
       const { token, username, email: userEmail } = response.data;

@@ -15,6 +15,8 @@ import ForgetPassword from './pages/Auth/ForgetPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import SearchBooks from './components/SearchBooks';
 
+
+
 function App() {
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
@@ -23,7 +25,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.get('http://localhost:3000/api/auth/me', {
+      axios.get(process.env.BASE_URL + '/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((response) => {

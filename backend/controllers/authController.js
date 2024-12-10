@@ -88,7 +88,7 @@ exports.forgetPassword = async (req, res) => {
 
     const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, {expiresIn: '15m' }); // token expires in 15 min
 
-    const resetLink = 'http://localhost:3000/reset-password/${resetToken}';
+    const resetLink = 'https://group2library.netlify.app/reset-password/${resetToken}';
     const mailOptions = {
       from: '',
       to: email,

@@ -30,7 +30,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/register", {
+      const response = await axios.post(process.env.BASE_URL + "/auth/register", {
         username,
         email,
         password,
