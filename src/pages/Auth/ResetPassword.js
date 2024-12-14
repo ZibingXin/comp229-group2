@@ -11,18 +11,20 @@ function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  console.log("Token from URL:", token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-
+  
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-
+  
     try {
+      console.log("Payload sent to backend:", { token, newPassword }); 
       const response = await axios.post("http://localhost:3000/api/auth/reset-password", {
         token,
         newPassword,
@@ -39,6 +41,7 @@ function ResetPassword() {
       }
     }
   };
+  
 
   return (
     <div className="container">

@@ -55,9 +55,27 @@ function UserDashboard({ username, email }) {
     }
   };
   
-  const handlePasswordChange = () => {
-    navigate('/reset-password');
+  const handlePasswordChange = async () => {
+    const email = userInfo.email; // 获取用户的 email
+    if (!email) {
+      alert('User email is required to reset password.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/forgot-password', { email });
+      const { resetLink } = response.data; // 获取后端返回的 resetLink
+      console.log("Reset link received:", resetLink);
+  
+      // 导航到生成的重置密码页面
+      navigate(resetLink.replace('http://localhost:3001', '')); // 去掉域名部分
+    } catch (error) {
+      console.error('Error generating reset link:', error);
+      alert('Failed to generate reset link. Please try again later.');
+    }
   };
+  
+  
 
   useEffect(() => {
     if (username || email) {

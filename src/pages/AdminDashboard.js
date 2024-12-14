@@ -53,7 +53,7 @@ const AdminDashboard = () => {
   const handleAddOrEditBook = async () => {
     try {
       if (!form.title || !form.author || !form.isbn) {
-        setMessage('Title, Author, and ISBN are required.');
+        alert('Title, Author, and ISBN are required.');
         return;
       }
 
@@ -62,11 +62,11 @@ const AdminDashboard = () => {
         setBooks(
           books.map((book) => (book._id === selectedBook._id ? updatedBook.data : book))
         );
-        setMessage('Book updated successfully!');
+        alert('Book updated successfully!');
       } else {
         const newBook = await bookService.addBook(form);
         setBooks([...books, newBook.data]);
-        setMessage('Book added successfully!');
+        alert('Book added successfully!');
       }
 
       setForm({
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
       setSelectedBook(null);
     } catch (error) {
       console.error('Error saving book:', error);
-      setMessage('Failed to save book.');
+      alert('Failed to save book.');
     }
   };
 
@@ -106,10 +106,10 @@ const AdminDashboard = () => {
     try {
       await bookService.deleteBook(bookId);
       setBooks(books.filter((book) => book._id !== bookId));
-      setMessage('Book deleted successfully!');
+      alert('Book deleted successfully!');
     } catch (error) {
       console.error('Error deleting book:', error);
-      setMessage('Failed to delete book.');
+      alert('Failed to delete book.');
     }
   };
 
@@ -153,11 +153,11 @@ const AdminDashboard = () => {
       await borrowService.borrowBook(borrowData);
       await reservationService.finishReservation(reservationId);
   
-      setMessage('Book borrowed successfully!');
+      alert('Book borrowed successfully!');
       handleSearchReservations(); 
     } catch (error) {
       console.error('Error borrowing book:', error);
-      setMessage('Failed to borrow book.');
+      alert('Failed to borrow book.');
     }
   };
   

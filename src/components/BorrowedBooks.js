@@ -23,7 +23,7 @@ const BorrowedBooks = () => {
         setBorrowedBooks(response.data);
       } catch (error) {
         console.error("Error fetching borrowed books:", error);
-        alert("Failed to fetch borrowed books.");
+        setMessage("Failed to fetch borrowed books.");
       }
     };
 

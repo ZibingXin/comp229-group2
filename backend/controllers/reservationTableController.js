@@ -54,6 +54,10 @@ exports.cancelReservation = async (req, res) => {
         if (!reservation || reservation.status === 'Canceled') {
             return res.status(404).json({ error: 'Reservation not found or already canceled' });
         }
+        else if(!reservation || reservation.status === 'Finished')
+        {
+            return res.status(404).json({ error: 'Reservation not found or already canceled' });
+        }
 
         // Cancel the reservation
         reservation.status = 'Canceled';

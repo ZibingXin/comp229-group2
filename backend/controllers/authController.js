@@ -88,15 +88,18 @@ exports.forgetPassword = async (req, res) => {
 
     const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, {expiresIn: '15m' }); // token expires in 15 min
 
-    const resetLink = 'http://localhost:3000/reset-password/${resetToken}';
-    const mailOptions = {
-      from: '',
-      to: email,
-      subject: 'Password Reset Request',
-      text: 'You requested a password reset. Please click the following link to reset your password: ${resetLink}',
-    };
+    const resetLink = `http://localhost:3001/reset-password/${resetToken}`;
+    res.status(200).json({ resetLink });
+    console.log("Generated Reset Link:", resetLink);
 
-    await transporter.sendMail(mailOptions);
+    // const mailOptions = {
+    //   from: '',
+    //   to: email,
+    //   subject: 'Password Reset Request',
+    //   text: 'You requested a password reset. Please click the following link to reset your password: ${resetLink}',
+    // };
+
+    // await transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: 'Password reset link sent to your email' });
   } catch (error) {
@@ -109,7 +112,9 @@ exports.resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
+    console.log("Received token:", token); 
     const decoded = jwt.verify(token, JWT_SECRET);
+    console.log("Decoded Token:", decoded); 
     const user = await User.findById(decoded.userId);
 
     if (!user) {

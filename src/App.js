@@ -70,7 +70,7 @@ function App() {
             <Route path="/book/:id" element={<BookDetails />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgetPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path='/searchBooks' element={<SearchBooks/>} />
             <Route path='/about' element={<About/>}/>
             <Route path='/contact' element={<Contact/>}/>
